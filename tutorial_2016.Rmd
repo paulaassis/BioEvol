@@ -17,13 +17,16 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Genética quantitativa e evolução
+# Introdução
+## Genética quantitativa e evolução
 
 Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos medidos em cinco espécies de roedores em uma filogenía conhecida. Usando esse conjunto de dados, vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.
 
 O primeiro passo, como sempre, é escolher um ambiente de análise. Neste tutorial vamos usar a linguem R, mas todos os passos poderiam ser feitos num programa gráfico como excel e Systat, ou em qualquer outra linguagem de programação, como python, perl, java, C ou Haskell. A linguagem R é especialmente conveniente, primeiro por que os monitores sabem usar ela, e segundo por que existe um pacote (escrito pelos monitores) que automatiza várias dos passos da análise.
 
 ## A linguagem R
+
+R é um ambiente de programação _open source_ criado pensando em análises estátisticas. Você pode ler um pouco mais sobre a linguagem neste [site](http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:03_apostila:01-intro}).
 
 ### Instalando o R
 
@@ -47,11 +50,11 @@ y = 2
 x + y
 ```
   
-### Seguindo o tutorial
+## Seguindo o tutorial
   
 Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório. Quando alguma operação no R parecer mais exotérica, vamos tentar explicar nos comentários do código ou no texto. Se não ficar claro, consulte os monitores!
 
-### Preliminares
+## Preliminares
 
 Para começar, precisamos instalar um pacote (chamado evolqg) e carregar os dados para a area de trabalho usando a função data. Funções no R são como pequenos conjuntos de instruções com um nome. Para executar uma função basta digitar o nome dela, com os argumentos daquela função entre parênteses. Linhas que começam com # são comentários e são ignoradas pelo R. (Para ver mais exemplos iniciais, confira [esse tutorial](http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:03_apostila:02-entrada) do curso de pós-graduação em R oferecido pela ecologia do IB!)
 
@@ -83,7 +86,7 @@ dentus
 head(dentus)
 ```
 
-Como podemos ver, os dados estão organizados em linhas e colunas. Cada linha representa um indivíduo, e cada coluna representa um caráter. As 4 primeiras colunas são os caracteres quantitativos, e a quinta e última coluna contém a espécie de cada indivíduo.
+Como podemos ver, os dados estão organizados em linhas e colunas. Cada linha representa um indivíduo, e cada coluna representa um caráter. As 4 primeiras colunas são os caracteres quantitativos, e a quinta coluna contém a espécie de cada indivíduo.
 
 # Objetivos da Aula 1
 

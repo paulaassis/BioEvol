@@ -255,18 +255,22 @@ div.tocify {
 </div>
 
 
-<div id="genetica-quantitativa-e-evolucao" class="section level1">
-<h1><span class="header-section-number">1</span> Genética quantitativa e evolução</h1>
+<div id="introducao" class="section level1">
+<h1><span class="header-section-number">1</span> Introdução</h1>
+<div id="genetica-quantitativa-e-evolucao" class="section level2">
+<h2><span class="header-section-number">1.1</span> Genética quantitativa e evolução</h2>
 <p>Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos medidos em cinco espécies de roedores em uma filogenía conhecida. Usando esse conjunto de dados, vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.</p>
 <p>O primeiro passo, como sempre, é escolher um ambiente de análise. Neste tutorial vamos usar a linguem R, mas todos os passos poderiam ser feitos num programa gráfico como excel e Systat, ou em qualquer outra linguagem de programação, como python, perl, java, C ou Haskell. A linguagem R é especialmente conveniente, primeiro por que os monitores sabem usar ela, e segundo por que existe um pacote (escrito pelos monitores) que automatiza várias dos passos da análise.</p>
+</div>
 <div id="a-linguagem-r" class="section level2">
-<h2><span class="header-section-number">1.1</span> A linguagem R</h2>
+<h2><span class="header-section-number">1.2</span> A linguagem R</h2>
+<p>R é um ambiente de programação <em>open source</em> criado pensando em análises estátisticas. Você pode ler um pouco mais sobre a linguagem neste <a href="http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:03_apostila:01-intro%7D">site</a>.</p>
 <div id="instalando-o-r" class="section level3">
-<h3><span class="header-section-number">1.1.1</span> Instalando o R</h3>
+<h3><span class="header-section-number">1.2.1</span> Instalando o R</h3>
 <p>Se você está utilizando um dos computadores do IB, o R já deve estar instalado. Se não, siga as instruções nesse <a href="https://mran.revolutionanalytics.com/download/">site</a> para instalar o R, e opcionalmente (mas muito recomendado!) o editor de código <a href="https://www.rstudio.com/products/rstudio/download/">RStudio</a>.</p>
 </div>
 <div id="rodando-comandos" class="section level3">
-<h3><span class="header-section-number">1.1.2</span> Rodando comandos</h3>
+<h3><span class="header-section-number">1.2.2</span> Rodando comandos</h3>
 <p>Ao longo desse tutorial, você sempre vai ver blocos de código que devem ser executados no ambiente R. Por exemplo, se estivessemos interessados em somar dois números poderiamos digitar:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> +<span class="st"> </span><span class="dv">1</span></code></pre></div>
 <pre><code>## [1] 2</code></pre>
@@ -277,12 +281,13 @@ y =<span class="st"> </span><span class="dv">2</span>
 x +<span class="st"> </span>y</code></pre></div>
 <pre><code>## [1] 3</code></pre>
 </div>
-<div id="seguindo-o-tutorial" class="section level3">
-<h3><span class="header-section-number">1.1.3</span> Seguindo o tutorial</h3>
+</div>
+<div id="seguindo-o-tutorial" class="section level2">
+<h2><span class="header-section-number">1.3</span> Seguindo o tutorial</h2>
 <p>Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório. Quando alguma operação no R parecer mais exotérica, vamos tentar explicar nos comentários do código ou no texto. Se não ficar claro, consulte os monitores!</p>
 </div>
-<div id="preliminares" class="section level3">
-<h3><span class="header-section-number">1.1.4</span> Preliminares</h3>
+<div id="preliminares" class="section level2">
+<h2><span class="header-section-number">1.4</span> Preliminares</h2>
 <p>Para começar, precisamos instalar um pacote (chamado evolqg) e carregar os dados para a area de trabalho usando a função data. Funções no R são como pequenos conjuntos de instruções com um nome. Para executar uma função basta digitar o nome dela, com os argumentos daquela função entre parênteses. Linhas que começam com # são comentários e são ignoradas pelo R. (Para ver mais exemplos iniciais, confira <a href="http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:03_apostila:02-entrada">esse tutorial</a> do curso de pós-graduação em R oferecido pela ecologia do IB!)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Instalando o pacote de genética quantitativa evolutiva</span>
 <span class="kw">install.packages</span>(<span class="st">&quot;evolqg&quot;</span>)
@@ -294,9 +299,8 @@ x +<span class="st"> </span>y</code></pre></div>
 <span class="kw">data</span>(dentus)</code></pre></div>
 <pre><code>## Loading required package: plyr</code></pre>
 </div>
-</div>
 <div id="aos-dados" class="section level2">
-<h2><span class="header-section-number">1.2</span> Aos dados!</h2>
+<h2><span class="header-section-number">1.5</span> Aos dados!</h2>
 <p>Com os dados carregados, podemos ver todas as medidas digitando o nome do objeto com os dados.</p>
 <p>Aqui vamos ver só as primeiras linhas, mas no seu computador você deve ver o conjunto completo.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dentus</code></pre></div>
