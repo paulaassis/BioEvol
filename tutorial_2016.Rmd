@@ -5,7 +5,9 @@ date: "October 12, 2016"
 output:
   html_document:
     toc: true
-    toc_float: true
+    toc_float:           
+          collapsed: false
+          smooth_scroll: false
     number_sections: true
     theme: flatly
     highlight: tango
