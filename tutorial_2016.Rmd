@@ -11,20 +11,139 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Genética quantitativa e evolução
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos em cindo espécies de roedor em uma filogenía conhecida. Usando esse conjunto de dados vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+O primeiro passo, como sempre, é escolher um ambiente de análise. Neste tutorial vamos usar a linguem R, mas todos os passos poderiam ser feitos num programa gráfico como excel e Systat, ou em qualquer outra linguagem de programação, como python, perl, java, C ou Haskell. A linguagem R é especialmente conveniente, primeiro por que os monitores sabem usar ela, e segundo por que existe um pacote (escrito pelos monitores) que automatiza várias dos passos da análise.
 
-```{r cars}
-summary(cars)
+## A linguagem R
+
+### Instalando o R
+
+Se você está utilizando um dos computadores do IB, o R já deve estar instalado. Se não, siga as instruções nesse [site](https://mran.revolutionanalytics.com/download/) para instalar o R, e opcionalmente (mas muito recomendado!) o editor de código [RStudio](https://www.rstudio.com/products/rstudio/download/).
+
+### Rodando comandos
+
+Ao longo desse tutorial, você sempre vai ver blocos de código que devem ser executados no ambiente R. Por exemplo, se estivessmos interessados em somar dois numeros poderiamos digitar:
+
+```{r sum}
+1 + 1
 ```
 
-## Including Plots
+E abaixo da operação temos o resultado que o programa retorna. 
 
-You can also embed plots, for example:
+Você pode também associar valores a variáveis (chamados objetos) e utilizar esses objetos nas suas operações. O operador "=" associa um valor a um objeto:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r objects}
+x = 1
+y = 2
+x + y
+```
+  
+### Seguindo o tutorial
+  
+Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório.  
+
+### Preliminares
+
+Para começar precisamos instalar um pacote (chamado evolqg) e carregar os dados para a area de trabalho usando a função data. Funções no R são como pequenos conjuntos de instruçòes com um nome. Para executar uma função basta digitar o nome dela, com os argumentos daquela função entre (). Linhas que começam com # são comentários e são ignoradas pelo R. (Para ver mais exemplos iniciais, confira [esse tutorial](http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:03_apostila:02-entrada) do curso de pós-graduação em R oferecido pela ecologia do IB!)
+
+```{r packagesfake, eval = FALSE}
+# Instalando o pacote de genética quantitativa evolutiva
+install.packages("evolqg")
+
+# Carregando o pacote evolqg
+library(evolqg)
+
+# Carregando o conjunto de dados que vamos utilizar
+data(dentus)
+```
+```{r packages, echo = FALSE}
+library(evolqg)
+data(dentus)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Aos dados!
+
+Com os dados carregados, podemos ver todas as medidas digitando o nome do objeto com os dados. 
+
+Aqui vamos ver só as primeiras linhas, mas no seu computador você deve ver o conjunto completo.
+
+```{r fake, eval = FALSE}
+dentus
+```
+```{r dados, echo = FALSE}
+head(dentus)
+```
+
+Como podemos ver, os dados estão organizados em linhas e colunas. Cada linha representa um indivíduo, e cada coluna representa um caráter. As 4 primeiras colunas são os caracteres quantitativos, e a quinta e última coluna contém a espécie de cada indivíduo.
+
+# Objetivos Aula 1
+
+Em cada aula vamos fazer algumas contas e discutir os resultados. Ao final do curso todos esses resultados devem ser compilado num relatório final.
+
+Nessa aula vamos calcular:
+
+1. Média de cada caráter;
+2. Variância de cada caráter;
+3. Coeficiente de variação de cada caráter.
+2. Gráfico da distribuição de cada caráter;
+
+## Médias e variâncias globais
+
+Vamos começar calculando as médias globais utilizando a função sapply e a função mean. Os resultados não aparecem aqui, mas rodando os comandos no R você deve ser capaz de produzí-los!
+
+```{r, eval = FALSE}
+# Como a última coluna contém as espécie, 
+# vamos utilizar o operador de indexação do R  [] para selecionar as colunas de 1 a 4.
+# A função sapply passa todas as colunas do primeiro argumento para a função no segundo argumento. 
+sapply(dentus[,1:4], mean)
+```
+
+Podemos utilizar a mesma estratégia para calcular as variâncias e desvios padrões:
+
+```{r, eval = FALSE}
+# Variâncias
+sapply(dentus[,1:4], var)
+
+# Desvios padrões
+sapply(dentus[,1:4], sd)
+```
+
+Para calcular o coeficiente de variação, podemos dividir diretamente o desvio padrão pela média:
+
+```{r, eval = FALSE}
+# Objeto com os desvios padrão
+dentus_sd = sapply(dentus[,1:4], sd)
+
+#Objeto com as médias
+dentus_mean = sapply(dentus[,1:4], mean)
+
+# Cálculo do coeficiente de variação
+dentus_sd/dentus_mean
+```
+
+Ou podemos criar uma função que calcula o coeficiente de variação diretamente
+
+```{r, eval = FALSE}
+# Função que calcula o coeficiente de variação
+cv = function(x) sd(x)/mean(x)
+
+# Cuoeficiente de variação
+sapply(dentus[,1:4], cv)
+```
+
+## Médias e variâncias por espécie
+
+Agora vamos tentar obter esses mesmos valores separando os dados pos espécie. A função aggregate vai ajudar. Essa função é muito semelhante à sapply, mas ela recebe um argumento adicional que permite utilizar uma coluna dos dados para separar os individuos em grupos. Por exemplo, para calcular a média por espécie fazemos:
+
+```{r}
+aggregate(dentus[,1:4], list(especie = dentus[,5]), mean)
+```
+
+Vc consegue seguir essa lógica e calcular as variâncias e coeficientes de variação por espécie?
+
+## Gráficos
+
+```{r}
+```
+
