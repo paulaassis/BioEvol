@@ -88,6 +88,8 @@ head(dentus)
 
 Como podemos ver, os dados estão organizados em linhas e colunas. Cada linha representa um indivíduo, e cada coluna representa um caráter. As 4 primeiras colunas são os caracteres quantitativos, e a quinta coluna contém a espécie de cada indivíduo.
 
+Essa mesma planilha está disponível nesse [link](https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2016.csv).
+
 # Objetivos da Aula 1
 
 Em cada aula vamos fazer algumas contas e discutir os resultados. Ao final do curso todos esses resultados devem ser compilado num relatório final.
