@@ -125,7 +125,7 @@ $(document).ready(function () {
 
 <div id="genetica-quantitativa-e-evolucao" class="section level1">
 <h1>Genética quantitativa e evolução</h1>
-<p>Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos em cindo espécies de roedor em uma filogenía conhecida. Usando esse conjunto de dados vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.</p>
+<p>Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos medidos em cinco espécies de roedores em uma filogenía conhecida. Usando esse conjunto de dados, vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.</p>
 <p>O primeiro passo, como sempre, é escolher um ambiente de análise. Neste tutorial vamos usar a linguem R, mas todos os passos poderiam ser feitos num programa gráfico como excel e Systat, ou em qualquer outra linguagem de programação, como python, perl, java, C ou Haskell. A linguagem R é especialmente conveniente, primeiro por que os monitores sabem usar ela, e segundo por que existe um pacote (escrito pelos monitores) que automatiza várias dos passos da análise.</p>
 <div id="a-linguagem-r" class="section level2">
 <h2>A linguagem R</h2>
@@ -135,7 +135,7 @@ $(document).ready(function () {
 </div>
 <div id="rodando-comandos" class="section level3">
 <h3>Rodando comandos</h3>
-<p>Ao longo desse tutorial, você sempre vai ver blocos de código que devem ser executados no ambiente R. Por exemplo, se estivessmos interessados em somar dois numeros poderiamos digitar:</p>
+<p>Ao longo desse tutorial, você sempre vai ver blocos de código que devem ser executados no ambiente R. Por exemplo, se estivessemos interessados em somar dois números poderiamos digitar:</p>
 <pre class="r"><code>1 + 1</code></pre>
 <pre><code>## [1] 2</code></pre>
 <p>E abaixo da operação temos o resultado que o programa retorna.</p>
@@ -147,11 +147,11 @@ x + y</code></pre>
 </div>
 <div id="seguindo-o-tutorial" class="section level3">
 <h3>Seguindo o tutorial</h3>
-<p>Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório.</p>
+<p>Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório. Quando alguma operação no R parecer mais exotérica, vamos tentar explicar nos comentários do código ou no texto. Se não ficar claro, consulte os monitores!</p>
 </div>
 <div id="preliminares" class="section level3">
 <h3>Preliminares</h3>
-<p>Para começar precisamos instalar um pacote (chamado evolqg) e carregar os dados para a area de trabalho usando a função data. Funções no R são como pequenos conjuntos de instruçòes com um nome. Para executar uma função basta digitar o nome dela, com os argumentos daquela função entre (). Linhas que começam com # são comentários e são ignoradas pelo R. (Para ver mais exemplos iniciais, confira <a href="http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:03_apostila:02-entrada">esse tutorial</a> do curso de pós-graduação em R oferecido pela ecologia do IB!)</p>
+<p>Para começar, precisamos instalar um pacote (chamado evolqg) e carregar os dados para a area de trabalho usando a função data. Funções no R são como pequenos conjuntos de instruções com um nome. Para executar uma função basta digitar o nome dela, com os argumentos daquela função entre parênteses. Linhas que começam com # são comentários e são ignoradas pelo R. (Para ver mais exemplos iniciais, confira <a href="http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:03_apostila:02-entrada">esse tutorial</a> do curso de pós-graduação em R oferecido pela ecologia do IB!)</p>
 <pre class="r"><code># Instalando o pacote de genética quantitativa evolutiva
 install.packages(&quot;evolqg&quot;)
 
@@ -178,19 +178,20 @@ data(dentus)</code></pre>
 <p>Como podemos ver, os dados estão organizados em linhas e colunas. Cada linha representa um indivíduo, e cada coluna representa um caráter. As 4 primeiras colunas são os caracteres quantitativos, e a quinta e última coluna contém a espécie de cada indivíduo.</p>
 </div>
 </div>
-<div id="objetivos-aula-1" class="section level1">
-<h1>Objetivos Aula 1</h1>
+<div id="objetivos-da-aula-1" class="section level1">
+<h1>Objetivos da Aula 1</h1>
 <p>Em cada aula vamos fazer algumas contas e discutir os resultados. Ao final do curso todos esses resultados devem ser compilado num relatório final.</p>
 <p>Nessa aula vamos calcular:</p>
 <ol style="list-style-type: decimal">
 <li>Média de cada caráter;</li>
 <li>Variância de cada caráter;</li>
-<li>Coeficiente de variação de cada caráter.</li>
-<li>Gráfico da distribuição de cada caráter;</li>
+<li>Coeficiente de variação de cada caráter;</li>
+<li>Gráfico da distribuição de cada caráter.</li>
 </ol>
 <div id="medias-e-variancias-globais" class="section level2">
 <h2>Médias e variâncias globais</h2>
-<p>Vamos começar calculando as médias globais utilizando a função sapply e a função mean. Os resultados não aparecem aqui, mas rodando os comandos no R você deve ser capaz de produzí-los!</p>
+<p>Vamos começar calculando as médias globais utilizando a função sapply e a função mean.</p>
+<p>Os resultados não aparecem aqui, mas rodando os comandos no R você deve ser capaz de produzí-los!</p>
 <pre class="r"><code># Como a última coluna contém as espécie, 
 # vamos utilizar o operador de indexação do R  [] para selecionar as colunas de 1 a 4.
 # A função sapply passa todas as colunas do primeiro argumento para a função no segundo argumento. 
@@ -199,13 +200,13 @@ sapply(dentus[,1:4], mean)</code></pre>
 <pre class="r"><code># Variâncias
 sapply(dentus[,1:4], var)
 
-# Desvios padrões
+# Desvios padrão
 sapply(dentus[,1:4], sd)</code></pre>
 <p>Para calcular o coeficiente de variação, podemos dividir diretamente o desvio padrão pela média:</p>
 <pre class="r"><code># Objeto com os desvios padrão
 dentus_sd = sapply(dentus[,1:4], sd)
 
-#Objeto com as médias
+# Objeto com as médias
 dentus_mean = sapply(dentus[,1:4], mean)
 
 # Cálculo do coeficiente de variação
@@ -214,7 +215,7 @@ dentus_sd/dentus_mean</code></pre>
 <pre class="r"><code># Função que calcula o coeficiente de variação
 cv = function(x) sd(x)/mean(x)
 
-# Cuoeficiente de variação
+# Coeficiente de variação
 sapply(dentus[,1:4], cv)</code></pre>
 </div>
 <div id="medias-e-variancias-por-especie" class="section level2">

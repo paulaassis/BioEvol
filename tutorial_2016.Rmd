@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Genética quantitativa e evolução
 
-Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos em cindo espécies de roedor em uma filogenía conhecida. Usando esse conjunto de dados vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.
+Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos medidos em cinco espécies de roedores em uma filogenía conhecida. Usando esse conjunto de dados, vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.
 
 O primeiro passo, como sempre, é escolher um ambiente de análise. Neste tutorial vamos usar a linguem R, mas todos os passos poderiam ser feitos num programa gráfico como excel e Systat, ou em qualquer outra linguagem de programação, como python, perl, java, C ou Haskell. A linguagem R é especialmente conveniente, primeiro por que os monitores sabem usar ela, e segundo por que existe um pacote (escrito pelos monitores) que automatiza várias dos passos da análise.
 
@@ -23,7 +23,7 @@ Se você está utilizando um dos computadores do IB, o R já deve estar instalad
 
 ### Rodando comandos
 
-Ao longo desse tutorial, você sempre vai ver blocos de código que devem ser executados no ambiente R. Por exemplo, se estivessmos interessados em somar dois numeros poderiamos digitar:
+Ao longo desse tutorial, você sempre vai ver blocos de código que devem ser executados no ambiente R. Por exemplo, se estivessemos interessados em somar dois números poderiamos digitar:
 
 ```{r sum}
 1 + 1
@@ -41,11 +41,11 @@ x + y
   
 ### Seguindo o tutorial
   
-Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório.  
+Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório. Quando alguma operação no R parecer mais exotérica, vamos tentar explicar nos comentários do código ou no texto. Se não ficar claro, consulte os monitores!
 
 ### Preliminares
 
-Para começar precisamos instalar um pacote (chamado evolqg) e carregar os dados para a area de trabalho usando a função data. Funções no R são como pequenos conjuntos de instruçòes com um nome. Para executar uma função basta digitar o nome dela, com os argumentos daquela função entre (). Linhas que começam com # são comentários e são ignoradas pelo R. (Para ver mais exemplos iniciais, confira [esse tutorial](http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:03_apostila:02-entrada) do curso de pós-graduação em R oferecido pela ecologia do IB!)
+Para começar, precisamos instalar um pacote (chamado evolqg) e carregar os dados para a area de trabalho usando a função data. Funções no R são como pequenos conjuntos de instruções com um nome. Para executar uma função basta digitar o nome dela, com os argumentos daquela função entre parênteses. Linhas que começam com # são comentários e são ignoradas pelo R. (Para ver mais exemplos iniciais, confira [esse tutorial](http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:03_apostila:02-entrada) do curso de pós-graduação em R oferecido pela ecologia do IB!)
 
 ```{r packagesfake, eval = FALSE}
 # Instalando o pacote de genética quantitativa evolutiva
@@ -77,7 +77,7 @@ head(dentus)
 
 Como podemos ver, os dados estão organizados em linhas e colunas. Cada linha representa um indivíduo, e cada coluna representa um caráter. As 4 primeiras colunas são os caracteres quantitativos, e a quinta e última coluna contém a espécie de cada indivíduo.
 
-# Objetivos Aula 1
+# Objetivos da Aula 1
 
 Em cada aula vamos fazer algumas contas e discutir os resultados. Ao final do curso todos esses resultados devem ser compilado num relatório final.
 
@@ -85,12 +85,14 @@ Nessa aula vamos calcular:
 
 1. Média de cada caráter;
 2. Variância de cada caráter;
-3. Coeficiente de variação de cada caráter.
-2. Gráfico da distribuição de cada caráter;
+3. Coeficiente de variação de cada caráter;
+2. Gráfico da distribuição de cada caráter.
 
 ## Médias e variâncias globais
 
-Vamos começar calculando as médias globais utilizando a função sapply e a função mean. Os resultados não aparecem aqui, mas rodando os comandos no R você deve ser capaz de produzí-los!
+Vamos começar calculando as médias globais utilizando a função sapply e a função mean. 
+
+Os resultados não aparecem aqui, mas rodando os comandos no R você deve ser capaz de produzí-los!
 
 ```{r, eval = FALSE}
 # Como a última coluna contém as espécie, 
@@ -105,7 +107,7 @@ Podemos utilizar a mesma estratégia para calcular as variâncias e desvios padr
 # Variâncias
 sapply(dentus[,1:4], var)
 
-# Desvios padrões
+# Desvios padrão
 sapply(dentus[,1:4], sd)
 ```
 
@@ -115,7 +117,7 @@ Para calcular o coeficiente de variação, podemos dividir diretamente o desvio 
 # Objeto com os desvios padrão
 dentus_sd = sapply(dentus[,1:4], sd)
 
-#Objeto com as médias
+# Objeto com as médias
 dentus_mean = sapply(dentus[,1:4], mean)
 
 # Cálculo do coeficiente de variação
@@ -128,7 +130,7 @@ Ou podemos criar uma função que calcula o coeficiente de variação diretament
 # Função que calcula o coeficiente de variação
 cv = function(x) sd(x)/mean(x)
 
-# Cuoeficiente de variação
+# Coeficiente de variação
 sapply(dentus[,1:4], cv)
 ```
 
