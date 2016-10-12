@@ -2,7 +2,13 @@
 title: "Tutorial Biologia Evolutiva 2016"
 author: "Diogo Melo"
 date: "October 12, 2016"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    theme: flatly
+    highlight: tango
 ---
 
 ```{r setup, include=FALSE}
