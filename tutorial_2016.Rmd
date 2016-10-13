@@ -20,9 +20,9 @@ knitr::opts_chunk$set(echo = TRUE)
 # Introdução
 ## Genética quantitativa e evolução
 
-Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos medidos em cinco espécies de roedores em uma filogenía conhecida. Usando esse conjunto de dados, vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.
+Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos medidos em cinco espécies de roedores em uma filogenia conhecida. Usando esse conjunto de dados, vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.
 
-O primeiro passo, como sempre, é escolher um ambiente de análise. Neste tutorial vamos usar a linguem R, mas todos os passos poderiam ser feitos num programa gráfico como excel e Systat, ou em qualquer outra linguagem de programação, como python, perl, java, C ou Haskell. A linguagem R é especialmente conveniente, primeiro por que os monitores sabem usar ela, e segundo por que existe um pacote (escrito pelos monitores) que automatiza várias dos passos da análise.
+O primeiro passo, como sempre, é escolher um ambiente de análise. Neste tutorial vamos usar a linguagem R, mas todos os passos poderiam ser feitos num programa gráfico como excel e Systat, ou em qualquer outra linguagem de programação, como python, perl, java, C ou Haskell. A linguagem R é especialmente conveniente, primeiro porque os monitores sabem usá-la, e segundo por que existe um pacote (escrito pelos monitores) que automatiza várias dos passos da análise.
 
 ## A linguagem R
 
@@ -52,7 +52,7 @@ x + y
   
 ## Seguindo o tutorial
   
-Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório. Quando alguma operação no R parecer mais exotérica, vamos tentar explicar nos comentários do código ou no texto. Se não ficar claro, consulte os monitores!
+Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R para ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório. Quando alguma operação no R parecer mais esotérica, vamos tentar explicar nos comentários do código ou no texto. Se não ficar claro, consulte os monitores!
 
 ## Preliminares
 
@@ -191,7 +191,7 @@ Podemos também usar boxplots:
 ggplot(melt(dentus), aes(species, value, fill = species, group = interaction(species, variable))) + geom_boxplot() + facet_wrap(~variable, scale = "free")
 ```
 
-Ou um xiquérrimo violin plot:
+Ou um chiquérrimo violin plot:
 
 ```{r, eval = FALSE}
 ggplot(melt(dentus), aes(species, value, fill = species, group = interaction(species, variable))) + geom_violin() + facet_wrap(~variable, scale = "free")
