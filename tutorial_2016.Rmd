@@ -181,20 +181,25 @@ library(reshape2)
 O primeiro e mais simples talvez seja o histograma.
 
 ```{r, eval = FALSE}
-ggplot(melt(dentus), aes(value, group = variable)) + 
-  geom_histogram() + facet_grid(variable~species)
+ggplot(melt(dentus), aes(value, group = species, fill = species)) + 
+  geom_histogram() + 
+  facet_wrap(~variable, scale = "free")
 ```
 
 Podemos também usar boxplots:
 
 ```{r, eval = FALSE}
-ggplot(melt(dentus), aes(species, value, fill = species, group = interaction(species, variable))) + geom_boxplot() + facet_wrap(~variable, scale = "free")
+ggplot(melt(dentus), aes(species, value, fill = species, group = interaction(species, variable))) + 
+  geom_boxplot() + 
+  facet_wrap(~variable, scale = "free")
 ```
 
 Ou um xiquérrimo violin plot:
 
 ```{r, eval = FALSE}
-ggplot(melt(dentus), aes(species, value, fill = species, group = interaction(species, variable))) + geom_violin() + facet_wrap(~variable, scale = "free")
+ggplot(melt(dentus), aes(species, value, fill = species, group = interaction(species, variable))) + 
+  geom_violin() + 
+  facet_wrap(~variable, scale = "free")
 ```
 
 ### Gráficos bivariados
@@ -204,13 +209,15 @@ Outro aspecto interessante é a relação par a par das variáveis.
 Por exemplo, vamos olhar para a distribuição bivariada dos dois primeiros caracteres, incluindo também uma reta de regressão por espécie:
 
 ```{r, eval = FALSE}
-ggplot(dentus, aes(humerus, ulna, group = species, color = species)) + geom_point() +
+ggplot(dentus, aes(humerus, ulna, group = species, color = species)) + 
+  geom_point() +
   geom_smooth(method = "lm", aes(group = species))
 ```
 
 Vc poderia fazer esse gráfico manualmente para todos os pares de caracteres, mas a função ggpairs resume tudo isso de uma vez:
 
 ```{r, eval = FALSE}
-ggpairs(dentus,  mapping = aes(color = species), columns = c("humerus", "ulna","femur", "tibia"))
+ggpairs(dentus, mapping = aes(color = species), 
+        columns = c("humerus", "ulna","femur", "tibia"))
 ```
 

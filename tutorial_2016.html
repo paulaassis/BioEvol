@@ -385,21 +385,28 @@ if(<span class="kw">length</span>(new_pkgs) &gt;<span class="st"> </span><span c
 <div id="graficos-univariados" class="section level3">
 <h3><span class="header-section-number">2.3.2</span> Gráficos univariados</h3>
 <p>O primeiro e mais simples talvez seja o histograma.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">melt</span>(dentus), <span class="kw">aes</span>(value, <span class="dt">group =</span> variable)) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_histogram</span>() +<span class="st"> </span><span class="kw">facet_grid</span>(variable~species)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">melt</span>(dentus), <span class="kw">aes</span>(value, <span class="dt">group =</span> species, <span class="dt">fill =</span> species)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_histogram</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(~variable, <span class="dt">scale =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 <p>Podemos também usar boxplots:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">melt</span>(dentus), <span class="kw">aes</span>(species, value, <span class="dt">fill =</span> species, <span class="dt">group =</span> <span class="kw">interaction</span>(species, variable))) +<span class="st"> </span><span class="kw">geom_boxplot</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~variable, <span class="dt">scale =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">melt</span>(dentus), <span class="kw">aes</span>(species, value, <span class="dt">fill =</span> species, <span class="dt">group =</span> <span class="kw">interaction</span>(species, variable))) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(~variable, <span class="dt">scale =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 <p>Ou um xiquérrimo violin plot:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">melt</span>(dentus), <span class="kw">aes</span>(species, value, <span class="dt">fill =</span> species, <span class="dt">group =</span> <span class="kw">interaction</span>(species, variable))) +<span class="st"> </span><span class="kw">geom_violin</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~variable, <span class="dt">scale =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">melt</span>(dentus), <span class="kw">aes</span>(species, value, <span class="dt">fill =</span> species, <span class="dt">group =</span> <span class="kw">interaction</span>(species, variable))) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_violin</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(~variable, <span class="dt">scale =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 </div>
 <div id="graficos-bivariados" class="section level3">
 <h3><span class="header-section-number">2.3.3</span> Gráficos bivariados</h3>
 <p>Outro aspecto interessante é a relação par a par das variáveis.</p>
 <p>Por exemplo, vamos olhar para a distribuição bivariada dos dois primeiros caracteres, incluindo também uma reta de regressão por espécie:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(dentus, <span class="kw">aes</span>(humerus, ulna, <span class="dt">group =</span> species, <span class="dt">color =</span> species)) +<span class="st"> </span><span class="kw">geom_point</span>() +
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(dentus, <span class="kw">aes</span>(humerus, ulna, <span class="dt">group =</span> species, <span class="dt">color =</span> species)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>() +
 <span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="kw">aes</span>(<span class="dt">group =</span> species))</code></pre></div>
 <p>Vc poderia fazer esse gráfico manualmente para todos os pares de caracteres, mas a função ggpairs resume tudo isso de uma vez:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggpairs</span>(dentus,  <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">color =</span> species), <span class="dt">columns =</span> <span class="kw">c</span>(<span class="st">&quot;humerus&quot;</span>, <span class="st">&quot;ulna&quot;</span>,<span class="st">&quot;femur&quot;</span>, <span class="st">&quot;tibia&quot;</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggpairs</span>(dentus, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">color =</span> species), 
+        <span class="dt">columns =</span> <span class="kw">c</span>(<span class="st">&quot;humerus&quot;</span>, <span class="st">&quot;ulna&quot;</span>,<span class="st">&quot;femur&quot;</span>, <span class="st">&quot;tibia&quot;</span>))</code></pre></div>
 </div>
 </div>
 </div>
