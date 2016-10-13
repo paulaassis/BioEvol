@@ -159,6 +159,58 @@ Vc consegue seguir essa lógica e calcular as variâncias e coeficientes de vari
 
 ## Gráficos
 
-```{r}
+É sempre importantissimo visualisar os dados usando gráficos antes de fazer qualquer análise mais complexa. Vamos explorar várias possibilidades de gráficos que revelam aspectos diferentes da distribuição dos nossos dados. 
+
+Para isso vamos carregar alguns pacotes gráficos:
+
+### Carregando pacotes gráficos
+
+```{r, eval = FALSE}
+list_pkgs <- c("ggplot2", "GGally", "reshape2")
+new_pkgs <- list_pkgs[!(list_pkgs %in% installed.packages()[,"Package"])]
+if(length(new_pkgs) > 0){ install.packages(new_pkgs) }
+
+library(evolqg)
+library(ggplot2)
+library(GGally)
+library(reshape2)
+```
+
+### Gráficos univariados
+
+O primeiro e mais simples talvez seja o histograma.
+
+```{r, eval = FALSE}
+ggplot(melt(dentus), aes(value, group = variable)) + 
+  geom_histogram() + facet_grid(variable~species)
+```
+
+Podemos também usar boxplots:
+
+```{r, eval = FALSE}
+ggplot(melt(dentus), aes(species, value, fill = species, group = interaction(species, variable))) + geom_boxplot() + facet_wrap(~variable, scale = "free")
+```
+
+Ou um xiquérrimo violin plot:
+
+```{r, eval = FALSE}
+ggplot(melt(dentus), aes(species, value, fill = species, group = interaction(species, variable))) + geom_violin() + facet_wrap(~variable, scale = "free")
+```
+
+### Gráficos bivariados
+
+Outro aspecto interessante é a relação par a par das variáveis.
+
+Por exemplo, vamos olhar para a distribuição bivariada dos dois primeiros caracteres, incluindo também uma reta de regressão por espécie:
+
+```{r, eval = FALSE}
+ggplot(dentus, aes(humerus, ulna, group = species, color = species)) + geom_point() +
+  geom_smooth(method = "lm", aes(group = species))
+```
+
+Vc poderia fazer esse gráfico manualmente para todos os pares de caracteres, mas a função ggpairs resume tudo isso de uma vez:
+
+```{r, eval = FALSE}
+ggpairs(dentus,  mapping = aes(color = species), columns = c("humerus", "ulna","femur", "tibia"))
 ```
 
