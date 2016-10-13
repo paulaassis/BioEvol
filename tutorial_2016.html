@@ -180,7 +180,6 @@ $(document).ready(function ()  {
 }
 }
 
-
 .toc-content {
   padding-left: 30px;
   padding-right: 40px;
@@ -284,7 +283,7 @@ x +<span class="st"> </span>y</code></pre></div>
 </div>
 <div id="seguindo-o-tutorial" class="section level2">
 <h2><span class="header-section-number">1.3</span> Seguindo o tutorial</h2>
-<p>Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório. Quando alguma operação no R parecer mais exotérica, vamos tentar explicar nos comentários do código ou no texto. Se não ficar claro, consulte os monitores!</p>
+<p>Exitem dois jeitos de seguir esse tutorial: (1) cegamente copiar e colar os comandos no R ver o resultado; ou (2) entender o que cada parte do comando executado está fazendo e assim já aprender um pouco de R de brinde. Ambas são ok! Nosso objetivo aqui é a biologia evolutiva, o R é só um acessório. Quando alguma operação no R parecer mais esotérica, vamos tentar explicar nos comentários do código ou no texto. Se não ficar claro, consulte os monitores!</p>
 </div>
 <div id="preliminares" class="section level2">
 <h2><span class="header-section-number">1.4</span> Preliminares</h2>
@@ -389,7 +388,7 @@ if(<span class="kw">length</span>(new_pkgs) &gt;<span class="st"> </span><span c
 <span class="st">  </span><span class="kw">geom_histogram</span>() +<span class="st"> </span><span class="kw">facet_grid</span>(variable~species)</code></pre></div>
 <p>Podemos também usar boxplots:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">melt</span>(dentus), <span class="kw">aes</span>(species, value, <span class="dt">fill =</span> species, <span class="dt">group =</span> <span class="kw">interaction</span>(species, variable))) +<span class="st"> </span><span class="kw">geom_boxplot</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~variable, <span class="dt">scale =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
-<p>Ou um xiquérrimo violin plot:</p>
+<p>Ou um chiquérrimo violin plot:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">melt</span>(dentus), <span class="kw">aes</span>(species, value, <span class="dt">fill =</span> species, <span class="dt">group =</span> <span class="kw">interaction</span>(species, variable))) +<span class="st"> </span><span class="kw">geom_violin</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~variable, <span class="dt">scale =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 </div>
 <div id="graficos-bivariados" class="section level3">
