@@ -345,7 +345,51 @@ Essa é a matriz de covariância total (sem separação por espécie) dos nossos
 
 Agora vamos medir as covariâncias e correlações dentro de cada espécis. Para isso, vamos aprender a escolher apenas algumas linhas de uma tabela de dados no R. Suponha que eu queira ver apenas as linhas que sejam da espécie A. Posso fazer isso com o comando:
 
-```{r}
+```{r, eval = FALSE}
 dentus[ dentus$species == "A", ]
 ```
 
+Podemos agora usar esse conjunto de dados reduzido para calcular a matriz da espécie A, e armazenar a matriz num objeto chamado cov_A:
+
+```{r}
+(cov_A = cov(dentus[ dentus$species == "A", 1:4]))
+```
+
+Siga essa mesma lógica e crie objetos para as matrizes de covariância e correlação de todas as espécies.
+
+## Visualizando correlações
+
+Podemos utilizar as matrizes de correlação para fazer representações gráficas da relação entre os pares de caracteres. Vamos escrever uma função (admito que meio complicada) que faça isso:
+
+```{r}
+library(ggplot2)
+library(reshape2)
+library(viridis)
+plotMatrix <- function (corMat, file = NULL) {
+  diag(corMat) <- NA
+  n_traits = nrow(corMat) 
+  myPalette <- viridis(50)
+  ## Se quiser uma paleta All American, use essa linha em vez da anterior
+  #myPalette <- colorRampPalette(c("blue", "white", "red"))(n = 50)
+  m.rs = melt(corMat) 
+  m.rs$Var1 <- factor(m.rs$Var1, levels = m.rs$Var1[n_traits:1])
+  m.rs.position = m.rs
+  m.rs.position$Var1 <- as.numeric(m.rs.position$Var1)
+  m.rs.position$Var2 <- as.numeric(m.rs.position$Var2)
+  m.rs.position$value= round(m.rs.position$value, 2)
+  m.rs.position$value[is.na(m.rs.position$value)] <- levels(m.rs$Var1)[n_traits:1]
+  p <- 
+    ggplot (m.rs) +
+    geom_tile(aes(x = Var2, y = Var1, fill = value)) +
+    scale_fill_gradientn(name = '', colours = myPalette, limits = c(-0.15, 1)) +
+    labs(x = NULL, y = NULL) + 
+    geom_text(data = m.rs.position, aes(x = Var2, y = Var1, label = value)) + 
+    theme_bw()
+  if(!is.null(file)) cowplot::save_plot(plot = p, file)
+  return(p)
+}
+cor_A = cor(dentus[ dentus$species == "A", 1:4])
+plotMatrix(cor_A)
+```
+
+Olhe para todas as matrizes de correlação. Quais são os padrões modulares? Como esses padrões diferem entre as espécies? 
