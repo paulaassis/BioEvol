@@ -6,7 +6,7 @@ output:
   html_document:
     toc: true
     toc_float:           
-          collapsed: false
+          collapsed: true
           smooth_scroll: false
     number_sections: true
     theme: flatly
@@ -227,3 +227,125 @@ ggpairs(dentus, mapping = aes(color = species),
 
     __Abstract:__
     The phenomenon of correlation pleiades, i.e., the presence of correlations between some quantitative characteristics of certain parts of an organism and at the same time by the absence of correlations between these and the other parts demonstrates the independence of certain developmental processes with respect to other processes within the organism. The study of correlation sets makes it possible to establish the degree of such independence. The adoption of a quantitative criterion provides an adequate basis for the comparative method in the study of stabilizing selection. Nineteen species of herbaceous plants have been studied in order to determine the variability in the degree of dependence between the dimensions of different parts of an organism. It has been established that twelve species have correlation pleiades, while seven species have no correlation pleiades with respect to the dimensions of analogous parts. In all the instances of existence of pleiades it was the flower that had become free of the correlation interdependences within the plant organism. Existence of correlation pleiades is associated with the mode of pollen transfer, involving the presence of specific insect pollinators, with adaptations to localize the pollen deposit on some definite part of the body of the pollinating insect, and with at least one of the structural features providing for such localization (zygomorphism, presence of tubular parts, lateral position of flowers, oligomerization and a rigid fixation of the number of homologous parts of a flower). Insects were the selective factor stabilizing the dimensions of those parts of flowers which participate in the process of the precise localization of pollen on the insect body. Stabilizing selection of flower dimensions created correlation pleiades for reproductive organs, as well as for vegetative parts of the same organism. The general principle underlying the origin of developmental homeostasis in the process of evolution is the discrepancy between the agencies participating in the formation of the character and the selective forces determining its function. The same principle is responsible for the origin of correlation pleiades.
+
+# Objetivos da Aula 2
+
+Nessa aula vamos explorar a associação presente entre os caracteres fenotípicos nas nossas populações.
+Com isso vamos poder discutir questões ligadas a função, desenvolvimento e a interação das populações com a seleção natural.
+
+Para isso, vamos calcular:
+
+ 1. A matriz de covariância fenotípica total;
+ 2. A matriz de covariância fenotípica pode espécie;
+ 3. A matriz de correlação por espécie;
+
+Além disso, discuta:
+
+ 1. Qual o padrão modular de cada espécie? 
+ 2. Qual é a intensidade da associação entre os caractéres em cada espécie?
+ 
+## Covariâncias e correlações
+
+Para entender como a associação entre os caracteres muda entre espécies, é preciso quantifica-lá. Para isso, vamos utilizar os conceitos de covariância e correlação. A covariância entre duas variáveis é definida como a média do produto dos desvios das médias das variáveis. Ou seja, se $\overline x$ e $\overline y$ são as médias dos caracteres $x$ e $y$, a covariâncias entre eles numa população é:
+
+$$
+Cov(x, y) = \frac{1}{N} \sum_{i = 1}^{N} (x_i - \overline{x})(y_i - \overline y)
+$$
+
+Para que possamos entender essa formula intuitivamente, vamos pensar nos sinais de cada termo da soma. Em que condições o termo $(x_i - \overline{x})(y_i - \overline y)$ é positivo e contribui pra aumentar a covariância? E quando ele é negativo? Como esse termo é um produto de desvios, o produto vai ser positivo quando os dois desvios tiverem o mesmo sinal, e negativo quando os desvios tiverem sinais diferentes. Ou seja: quando tanto o caráter $x$  quando o $y$ estiverem acima ou abaixo das suas médias, o produto é positivo e contribui pra aumentar a covariância; quando $x$ é menor do que a média e $y$ é maior, ou vice-versa, o produto é negativo e contribui para diminuir a covariância. Se, ainda, os desvios não tiverem relação nenhuma, desvios na mesma direção e em direções opostas tendem a se cancelar, e a covariação será
+próxima de zero. Isso está ilustrado na figura abaixo, indivíduos nas regiões em azul aumentam a covariância, enquanto indivíduos na região em amarelo diminuem a covariância.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE }
+set.seed(42)
+library(ggplot2)
+library(mvtnorm)
+data = data.frame(rmvnorm(50, sigma = 0.8*matrix(c(1, 0.7, 0.7, 1), 2)))
+ggplot(data, aes(X1, X2)) + 
+   annotate("rect", xmin = Inf, xmax = 0, ymin = Inf, ymax = 0, fill= "blue", alpha = 0.5)  + 
+   annotate("rect", xmin = -Inf, xmax = 0, ymin = -Inf, ymax = 0 , fill= "blue", alpha = 0.5) + 
+   annotate("rect", xmin = 0, xmax = Inf, ymin = 0, ymax = -Inf, fill= "yellow", alpha = 0.5) + 
+   annotate("rect", xmin = 0, xmax = -Inf, ymin = Inf, ymax = 0, fill= "yellow", alpha = 0.5) + 
+   geom_point() + theme_classic() + xlim(-2,2)+ ylim(-2,2) + labs(x = "x", y = "y")
+```
+
+As covariâncias entre caracteres são quantidades muito importantes na biologia evolutiva, como vamos ver mais adiante no curso. Apesar disso, elas sofrem do mesmo problema das variâncias: dependem da escala absoluta dos caracteres sendo medidos. Assim, não podemos comparar covariâncias entre pares de caracteres que tenham escalas diferentes, e não podemos comparar as covariâncias entre os mesmo caracteres medidos em organismos que tenham escalas diferentes. Para isso, vamos definir uma segunda medida de associação que e admensional, e que pode ser comparada entre escalas: a correlação linear. Note que se medirmos a covariância de um caráter com ele mesmo, chegamos na formula da variância. A partir disso, é fácil mostrar que o valor mais alto que uma covariância pode assumir é o produto dos desvios padrão entre as variâveis medidas (afinal, a covariância máxima de um caráter é com ele mesmo, ou seja, sua variância, que é o desvio padrão ao quadrado). Então, vamos definir a correlação como a proporção da covariância máxima entre dois caracteres, ou a covariância dividido pelo produto dos desvios padrão: 
+
+$$
+Cor(x, y) = \frac{Cov(x, y)}{\sigma_x \sigma_y} = \frac{1}{N} \sum_{i = 1}^{N} \frac{(x_i - \overline{x})(y_i - \overline y)}{\sigma_x \sigma_y}
+$$
+
+Essa quantidade varia entre -1 e 1, e mede o grau de associação entre duas variáveis numa escala absoluta. Correlações próximas de 1 indicam que os caracteres variam juntos e na mesma direção; correlações próximas de -1 indicam que os caracteres variam juntos mas em direções opostas; correlações próximas de zero indicam que os caracteres são independentes. A correlação pode ser comparada entre caracteres e populações diferentes. 
+
+## Medindo covariâncias e correlações no R
+
+Primeiro vamos carregar os dados novamente:
+
+```{r}
+# Carregando o pacote evolqg
+if(!require(evolqg)){install.packages("evolqg"); library(evolqg)}
+data(dentus)
+```
+
+Agora vamos utilizar a função cov para calcular a covariância entre um par de caracteres:
+
+```{r}
+cov(dentus$humerus, dentus$ulna)
+```
+
+__Pergunta__: Esse valor de covariância é alto ou baixo? 
+
+__Resposta__: Não faço a mais parva idéia! A covariância depende da escala! Vamos olhar para a correlação (usando a função cor), que tem escala absoluta.
+
+```{r}
+cor(dentus$humerus, dentus$ulna)
+```
+
+Esse é um valor próximo de 1, indicando alta associação entre as duas variáveis. Podemos ver isso num gráfico bivariado:
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE }
+set.seed(42)
+library(ggplot2)
+library(mvtnorm)
+ggplot(dentus, aes(humerus, ulna)) + 
+   annotate("rect", xmin = Inf, xmax = mean(dentus$humerus), 
+            ymin = Inf, ymax = mean(dentus$ulna), fill= "blue", alpha = 0.5)  + 
+   annotate("rect", xmin = -Inf, xmax = mean(dentus$humerus), 
+            ymin = -Inf, ymax = mean(dentus$ulna) , fill= "blue", alpha = 0.5) + 
+   annotate("rect", xmin = mean(dentus$humerus), xmax = Inf, 
+            ymin = mean(dentus$ulna), ymax = -Inf, fill= "yellow", alpha = 0.5) + 
+   annotate("rect", xmin = mean(dentus$humerus), xmax = -Inf, 
+            ymin = Inf, ymax = mean(dentus$ulna), fill= "yellow", alpha = 0.5) + 
+   geom_point() + theme_classic()
+```
+
+A grande maioria dos pontos fica na região azul.
+
+## Medindo várias covariâncias no R
+
+Para que possamos comparar e interpretar a covariância ou correlação entre vários pares de caracteres simultaneamente, vamos utilizar uma notação matricial. Numa matriz de variância-covariância (ou simplesmente matriz de covariância), podemos representar todos os caracteres nas linhas e colunas, e assim, para saber a covariância entre um par de caracteres basta consultar a linha correspondente ao primeiro caráter na coluna correspondente ao segundo caráter. Para um conjunto de $p$ caracteres $\{z_1, z_2, ..., z_p\}$, podemos excrever sua matriz de covariância como:
+
+$$
+\begin{matrix}
+Var(z_1) & Cov(z_1, z_2) & \cdots & Cov(z_1, z_p) \\
+Cov(z_1, z_2) & Var(z_2) & \cdots & Cov(z_2, z_p) \\
+\vdots & \vdots  & \ddots & \vdots                \\
+Cov(z_1, z_p) & Cov(z_1, z_p) & \cdots & Var(z_p) \\
+\end{matrix}
+$$
+
+No R, basta chamar a função cov num objeto com mais de uma coluna:
+
+```{r}
+cov(dentus[,1:4])
+```
+
+Essa é a matriz de covariância total (sem separação por espécie) dos nossos dados. Onde está o valor de covariância entre humero e ulna que calculamos antes? Esse valor aparece quantas vezes na matriz? Por que? Você consegue calcular agora a matriz de correlação total? Tem um jeito fácil (função cor), um médio (função cov2cor), e um difícil (na unha)!
+
+## Medindo covariâncias de cada espécie
+
+Agora vamos medir as covariâncias e correlações dentro de cada espécis. Para isso, vamos aprender a escolher apenas algumas linhas de uma tabela de dados no R. Suponha que eu queira ver apenas as linhas que sejam da espécie A. Posso fazer isso com o comando:
+
+```{r}
+dentus[ dentus$species == "A", ]
+```
+
