@@ -343,7 +343,7 @@ Essa é a matriz de covariância total (sem separação por espécie) dos nossos
 
 ## Medindo covariâncias de cada espécie
 
-Agora vamos medir as covariâncias e correlações dentro de cada espécis. Para isso, vamos aprender a escolher apenas algumas linhas de uma tabela de dados no R. Suponha que eu queira ver apenas as linhas que sejam da espécie A. Posso fazer isso com o comando:
+Agora vamos medir as covariâncias e correlações dentro de cada espécie. Para isso, vamos aprender a escolher apenas algumas linhas de uma tabela de dados no R. Suponha que eu queira ver apenas as linhas que sejam da espécie A. Posso fazer isso com o comando:
 
 ```{r, eval = FALSE}
 dentus[ dentus$species == "A", ]
@@ -388,6 +388,11 @@ plotMatrix <- function (corMat, file = NULL) {
   if(!is.null(file)) cowplot::save_plot(plot = p, file)
   return(p)
 }
+```
+
+Agora podemos usar essa função para plotar a matriz de correlação de uma das espécies:
+
+```{r}
 cor_A = cor(dentus[ dentus$species == "A", 1:4])
 plotMatrix(cor_A)
 ```
