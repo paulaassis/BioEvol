@@ -294,7 +294,7 @@ cov(dentus$humerus, dentus$ulna)
 
 __Pergunta__: Esse valor de covariância é alto ou baixo? 
 
-__Resposta__: Não faço a mais parva idéia! A covariância depende da escala! Vamos olhar para a correlação (usando a função cor), que tem escala absoluta.
+__Resposta__: Não faço a mais parva ideia! A covariância depende da escala! Vamos olhar para a correlação (usando a função cor), que tem escala absoluta.
 
 ```{r}
 cor(dentus$humerus, dentus$ulna)
@@ -302,7 +302,7 @@ cor(dentus$humerus, dentus$ulna)
 
 Esse é um valor próximo de 1, indicando alta associação entre as duas variáveis. Podemos ver isso num gráfico bivariado:
 
-```{r, echo = FALSE, warning=FALSE, message=FALSE }
+```{r, warning=FALSE, message=FALSE }
 set.seed(42)
 library(ggplot2)
 library(mvtnorm)
