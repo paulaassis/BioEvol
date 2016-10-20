@@ -60,7 +60,7 @@ Para começar, precisamos instalar um pacote (chamado evolqg) e carregar os dado
 
 ```{r packagesfake, eval = FALSE}
 # Instalando o pacote de genética quantitativa evolutiva
-install.packages("evolqg")
+if(!require){install.packages("evolqg")}
 
 # Carregando o pacote evolqg
 library(evolqg)
@@ -398,3 +398,10 @@ plotMatrix(cor_A)
 ```
 
 Olhe para todas as matrizes de correlação. Quais são os padrões modulares? Como esses padrões diferem entre as espécies? 
+
+# Leitura da Aula 3
+
+- [Adaptive Radiation Along Genetic Lines of Least Resistance](https://www.jstor.org/stable/2410734) ([pdf](https://github.com/lem-usp/site-bio208/raw/master/static/pdfs/artigos/Schluter%20-%201996%20-%20Adaptive%20Radiation%20Along%20Genetic%20Lines%20of%20Least%20Resistance.pdf))
+
+    __Abstract:__
+    Are measurements of quantitative genetic variation useful for predicting long-term adaptive evolution? To answer this question, I focus on gmax, the multivariate direction of greatest additive genetic variance within populations. Original data on threespine sticklebacks, together with published genetic measurements from other vertebrates, show that morphological differentiation between species has been biased in the direction of gmax for at least four million years, despite evidence that natural selection is the cause of differentiation. This bias toward the direction of evolution tends to decay with time. Rate of morphological divergence between species is inversely proportional to θ, the angle between the direction of divergence and the direction of greatest genetic variation. The direction of greatest phenotypic variance is not identical with gmax, but for these data is nearly as successful at predicting the direction of species divergence. I interpret the findings to mean that genetic variances and covariances constrain adaptive change in quantitative traits for reasonably long spans of time. An alternative hypothesis, however, cannot be ruled out: that morphological differentiation is biased in the direction gmax because divergence and gmax are both shaped by the same natural selection pressures. Either way, the results reveal that adaptive differentiation occurs principally along "genetic lines of least resistance."
