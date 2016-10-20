@@ -1,0 +1,39 @@
+---
+title: "Roteiro para Monografia Final"
+subtitle: "Bio 312"
+author: "Gabriel Marroig"
+date: "October 20, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Existem 5 espécies deste roedores alocadas ao gênero Dentus. Você têm medidas corporais tomadas com precisão de 0.01 mm no úmero (coluna 1), ulna (coluna 2), tíbia (coluna 3) e fêmur (coluna 4) para as 5 espécies. Além destes dados, existem na literatura alguns aspectos ecológicos efisiológicos das espécies.  
+
+- A espécie E apresenta um desenvolvimento desacelerado em relação às demais espécies do grupo. 
+- A espécie C é a única do grupo que vive em tocas, possuindo um hábito escavador. 
+- Já a espécie B tem a particularidade de viver em ambientes desérticos e apresentar uma locomoção diferenciada (bipedal) em relação às demais espécies que são quadrúpudes. 
+- A espécie D tem o corpo bastante alongado e bastante variação de tamanho, sugerindo uma alocação de energia em crescimento bastante pronunciada. 
+- Finalmente, a espécie A apresenta um padrão de integração similar a do ancestral do grupo. 
+
+De posse destas medidas e das informações extraídas da literatura, o trabalho consiste em colocar no papel tudo que você aprendeu nas últimas aulas, analisando estes dados e interpretando os resultados. Em particular quero que os seguintes pontos sejam abordados: 
+
+1. Calcule a média, o desvio padrão e o coeficiente de variação para cada medida e cada espécie e compare caracterizando cada espécie. 
+
+2. Calcule as estimativas dos valores médios para os ancestrais usando a filogenia abaixo com comprimentos de ramo igual a 1. Calcule as diferenças médias entre as espécies (oito vetores DeltaZ ao longo dos ramos da filogenia). Calcule a norma dos vetores deltaZ (ou seja, o comprimento desses vetores). 
+
+3. Comparar a estrutura de variação e covariação entre os 4 caracteres nas 5 espécies. Discuta as semelhanças e diferenças entre as espécies no relacionamento destas medidas tanto em relação a padrões (correlações positivas ou negativas) como a magnitudes de associação entre os caracteres. 
+
+4. Compare estas diferenças (DeltaZ) com o primeiro (PC1) e segundo (PC2) componente principal de cada espécie, por meio de correlação de vetores. 
+
+5.  Descreva e compare as linhas de menor resistência evolutiva em cada uma destas espécies (correlação dos PC1s e dos PC2s entre as espécies) .
+
+6. Calcule as matrizes ponderadas para cada nó na filogenia. Compare os DeltaZs do item 2 com os PC1 e PC2 de cada matriz ancestral (nó) do qual aquele ramo da filogenia têm origem.
+
+7. Discuta as diferenças entre as espécies a luz do conceito de linhas de menor resistência evolutiva. 
+
+8. Reconstrua os gradientes de seleção para cada ramo da filogenia. 
+
+9. Escreva um ensaio no qual todas as informações acima são organizadas em forma de tabelas e figuras e discutidas propriamente em termos de tudo aquilo que vocês aprenderam nas aulas e das associações passíveis de serem feitas com as informações ecológicas e fisiológicas.   
