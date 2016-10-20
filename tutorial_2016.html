@@ -512,9 +512,8 @@ Cov(z_1, z_p) &amp; Cov(z_1, z_p) &amp; \cdots &amp; Var(z_p) \\
 <p>Podemos utilizar as matrizes de correlação para fazer representações gráficas da relação entre os pares de caracteres. Vamos escrever uma função (admito que meio complicada) que faça isso:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(reshape2)
-if(!<span class="kw">require</span>(viridis)) <span class="kw">install.packages</span>(<span class="st">&quot;viridis&quot;</span>)</code></pre></div>
-<pre><code>## Loading required package: viridis</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(viridis)
+if(!<span class="kw">require</span>(viridis)) <span class="kw">install.packages</span>(<span class="st">&quot;viridis&quot;</span>)
+<span class="kw">library</span>(viridis)
 plotMatrix &lt;-<span class="st"> </span>function (corMat, <span class="dt">file =</span> <span class="ot">NULL</span>) {
   <span class="kw">diag</span>(corMat) &lt;-<span class="st"> </span><span class="ot">NA</span>
   n_traits =<span class="st"> </span><span class="kw">nrow</span>(corMat) 

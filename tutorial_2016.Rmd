@@ -367,7 +367,7 @@ Siga essa mesma lógica e crie objetos para as matrizes de covariância e correl
 
 Podemos utilizar as matrizes de correlação para fazer representações gráficas da relação entre os pares de caracteres. Vamos escrever uma função (admito que meio complicada) que faça isso:
 
-```{r}
+```{r, message=FALSE}
 library(ggplot2)
 library(reshape2)
 if(!require(viridis)) install.packages("viridis")
