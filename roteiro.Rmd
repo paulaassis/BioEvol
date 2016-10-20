@@ -14,7 +14,7 @@ Existem 5 espécies deste roedores alocadas ao gênero Dentus. Você têm medida
 
 - A espécie E apresenta um desenvolvimento desacelerado em relação às demais espécies do grupo. 
 - A espécie C é a única do grupo que vive em tocas, possuindo um hábito escavador. 
-- Já a espécie B tem a particularidade de viver em ambientes desérticos e apresentar uma locomoção diferenciada (bipedal) em relação às demais espécies que são quadrúpudes. 
+- Já a espécie B tem a particularidade de viver em ambientes desérticos e apresentar uma locomoção diferenciada (bipedal) em relação às demais espécies, que são quadrúpudes. 
 - A espécie D tem o corpo bastante alongado e bastante variação de tamanho, sugerindo uma alocação de energia em crescimento bastante pronunciada. 
 - Finalmente, a espécie A apresenta um padrão de integração similar a do ancestral do grupo. 
 
@@ -22,15 +22,24 @@ De posse destas medidas e das informações extraídas da literatura, o trabalho
 
 1. Calcule a média, o desvio padrão e o coeficiente de variação para cada medida e cada espécie e compare caracterizando cada espécie. 
 
-2. Calcule as estimativas dos valores médios para os ancestrais usando a filogenia abaixo com comprimentos de ramo igual a 1. Calcule as diferenças médias entre as espécies (oito vetores DeltaZ ao longo dos ramos da filogenia). Calcule a norma dos vetores deltaZ (ou seja, o comprimento desses vetores). 
+2. Calcule as estimativas dos valores médios para os ancestrais usando a filogenia abaixo com comprimentos de ramo dados pela escala acima da filogenia. Calcule as diferenças médias entre as espécies (oito vetores $\Delta z$ ao longo dos ramos da filogenia). Calcule a norma dos vetores $\Delta z$ (ou seja, o comprimento desses vetores). 
 
-3. Comparar a estrutura de variação e covariação entre os 4 caracteres nas 5 espécies. Discuta as semelhanças e diferenças entre as espécies no relacionamento destas medidas tanto em relação a padrões (correlações positivas ou negativas) como a magnitudes de associação entre os caracteres. 
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library(phytools)
+TREE <- "(A:4,(B:3,(C:2,(D:1, E:1):1):1):1);"
+tree <- read.tree(text = TREE)
+plot(tree)
+add.scale.bar(x = 0, y = 5, length = 1)
+```
 
-4. Compare estas diferenças (DeltaZ) com o primeiro (PC1) e segundo (PC2) componente principal de cada espécie, por meio de correlação de vetores. 
 
-5.  Descreva e compare as linhas de menor resistência evolutiva em cada uma destas espécies (correlação dos PC1s e dos PC2s entre as espécies) .
+3. Compare a estrutura de variação e covariação entre os 4 caracteres nas 5 espécies. Discuta as semelhanças e diferenças entre as espécies no relacionamento destas medidas tanto em relação a padrões (correlações positivas ou negativas) como a magnitudes de associação entre os caracteres. 
 
-6. Calcule as matrizes ponderadas para cada nó na filogenia. Compare os DeltaZs do item 2 com os PC1 e PC2 de cada matriz ancestral (nó) do qual aquele ramo da filogenia têm origem.
+4. Compare estas diferenças ($\Delta z$) com o primeiro (PC1) e segundo (PC2) componente principal de cada espécie, por meio de correlação de vetores. 
+
+5. Descreva e compare as linhas de menor resistência evolutiva em cada uma destas espécies (correlação dos PC1s e dos PC2s entre as espécies).
+
+6. Calcule as matrizes ponderadas para cada nó na filogenia. Compare os $\Delta z$ do item 2 com os PC1 e PC2 de cada matriz ancestral (nó) do qual aquele ramo da filogenia têm origem.
 
 7. Discuta as diferenças entre as espécies a luz do conceito de linhas de menor resistência evolutiva. 
 
