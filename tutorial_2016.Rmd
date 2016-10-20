@@ -370,6 +370,7 @@ Podemos utilizar as matrizes de correlação para fazer representações gráfic
 ```{r}
 library(ggplot2)
 library(reshape2)
+if(!require(viridis)) install.packages("viridis")
 library(viridis)
 plotMatrix <- function (corMat, file = NULL) {
   diag(corMat) <- NA
