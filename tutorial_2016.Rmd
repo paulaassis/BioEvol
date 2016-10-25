@@ -412,3 +412,198 @@ Olhe para todas as matrizes de correlação. Quais são os padrões modulares? C
 
     __Abstract:__
     Are measurements of quantitative genetic variation useful for predicting long-term adaptive evolution? To answer this question, I focus on gmax, the multivariate direction of greatest additive genetic variance within populations. Original data on threespine sticklebacks, together with published genetic measurements from other vertebrates, show that morphological differentiation between species has been biased in the direction of gmax for at least four million years, despite evidence that natural selection is the cause of differentiation. This bias toward the direction of evolution tends to decay with time. Rate of morphological divergence between species is inversely proportional to θ, the angle between the direction of divergence and the direction of greatest genetic variation. The direction of greatest phenotypic variance is not identical with gmax, but for these data is nearly as successful at predicting the direction of species divergence. I interpret the findings to mean that genetic variances and covariances constrain adaptive change in quantitative traits for reasonably long spans of time. An alternative hypothesis, however, cannot be ruled out: that morphological differentiation is biased in the direction gmax because divergence and gmax are both shaped by the same natural selection pressures. Either way, the results reveal that adaptive differentiation occurs principally along "genetic lines of least resistance."
+
+# Objetivos da Aula 3
+
+- Calcular os componentes principais de cada espécie
+
+## Componentes principais
+
+A tecnica de componentes princiais (também conhecida como principal component analysis ou PCA) consiste em encontrar eixos ortogonais (com angulo de 90 graus entre eles) nos quais as variáveis medidas são não correlacionadas. Em outras palavras, nós descrevemos os individuos das nossas populações usando eixos relacionados às medidas tomadas em cada individuo, então um eixo corresponde ao comprimento do humero, outro eixo ao comprimento da ulna e assim por diante. Mas nesses eixos, que tem uma interpretação biológica clara, as medidas dos individuos em cada eixo são correlacionadas. 
+
+### Mudando os eixos
+
+A analise de componentes principais consiste em encontrar eixos, criados a partir dos eixos originais, nos quais os individuos não são correlacionados. Antes de chegar nos componentes principais, vamos entender o que significa mudar os dados de eixos. Podemos ter, por exemplo, um eixo definido como uma combinação entre humero e ulna, e outro eixo correspondente à diferença entre humero e ulna. Vamos visualizar isso graficamente em duas dimensões, primeiro representando nos eixos originais as medidas de humero e ulna da espécie A. Vamos centralizar as medidas no zero para facilitar o gráfico, de modo que os valores nos eixos x e y vão ser diferenças das médias:
+
+```{r, warning=FALSE, message=FALSE }
+if(!require(evolqg)){install.packages("evolqg"); library(evolqg)}
+data(dentus)
+
+library(ggplot2)
+# Separando e centralizando os dados da espécie A
+dentus_A = as.data.frame(scale(dentus[dentus$species == "A",1:4], scale = FALSE))
+
+# Plot de humero por ulna. Note que as duas medidas são correlacionadas 
+cor(dentus$humerus, dentus$ulna)
+ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + theme_bw()
+```
+
+Vamos agora incluir esses dois novos eixos hipotéticos, um na direção de aumento de humero e ulna (em azul), e um na direção de aumento de humero e diminuição de ulna (em vermelho). 
+
+```{r, warning=FALSE, message=FALSE }
+ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + geom_abline(intercept = 0, slope = 1, color = "blue", linetype = "dashed") + geom_abline(intercept = 0, slope = -1, color = "red", linetype = "dashed") + geom_segment(x = 0, y = 0, xend = 1, yend = 1, arrow = arrow(length = unit(0.03, "npc")), color = "blue") + geom_segment(x = 0, y = 0, xend = 1, yend = -1, arrow = arrow(length = unit(0.03, "npc")), color = "red") + theme_bw()
+```
+
+Podemos calcular as medidas de cada inviduo (scores) nesses novos eixos projetando os pontos. Para isso, temos que achar o ponto na reta que seja o mais próximo do ponto a ser projetado. Isso envolve um pouco de trigonometria, mas vamos usar essa função que encontra o ponto numa reta mais próximo de um ponto qualquer. Eu mantive o código aqui a titulo de curiosidade, não precisam se preocupar com ele:
+
+```{r}
+# A reta é definida pelos pontos p_0 e p_1, e o ponto fora da reta é o q
+pontoMaisProximo <- function(q, p_0, p_1){
+  A = matrix(c(p_1[1] - p_0[1], p_1[2] - p_0[2],
+               p_0[2] - p_1[2], p_1[1] - p_0[1]), byrow = TRUE, ncol = 2)
+  b = -1*c(-1*  q[1]*(p_1[1] - p_0[1]) -   q[2]*(p_1[2] - p_0[2]),
+           -1*p_0[2]*(p_1[1] - p_0[1]) + p_0[1]*(p_1[2] - p_0[2]))
+  return(c(q, solve(A, b)))
+}
+projecoes_blue = data.frame(t(apply(dentus_A[,1:2], 1, pontoMaisProximo, c(0, 0), c(1, 1))))
+names(projecoes_blue) = c("x1", "y1", "x2", "y2")
+projecoes_red = data.frame(t(apply(dentus_A[,1:2], 1, pontoMaisProximo, c(0, 0), c(1, -1))))
+names(projecoes_red) = c("x1", "y1", "x2", "y2")
+ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + 
+  geom_abline(intercept = 0, slope = 1, color = "blue", linetype = "dashed") + 
+  geom_abline(intercept = 0, slope = -1, color = "red", linetype = "dashed") + 
+  geom_segment(x = 0, y = 0, xend = 1, yend = 1, arrow = arrow(length = unit(0.03, "npc")), color = "blue") + 
+  geom_segment(x = 0, y = 0, xend = 1, yend = -1, arrow = arrow(length = unit(0.03, "npc")), color = "red") + 
+  geom_segment(data = projecoes_blue, aes(x = x1, xend = x2, y = y1, yend = y2), linetype = "dotted", color = "blue") + 
+  geom_segment(data = projecoes_red, aes(x = x1, xend = x2, y = y1, yend = y2), linetype = "dotted", color = "red") + theme_bw()
+```
+
+Nós podemos também rotacionar o dados, e plotar cada individuo como se os novos eixos "compostos", o azul e o vermelho, fossem os eixos x e y:
+
+```{r}
+# Rotacionando os dados usando uma matriz de rotação
+dentus_A_rot = data.frame(as.matrix(dentus_A[,1:2]) %*% matrix(c(1/sqrt(2), 1/sqrt(2), 
+                                                                 1/sqrt(2), -1/sqrt(2)), 2, 2))
+names(dentus_A_rot) = c("x", "y")
+ggplot(dentus_A_rot, aes(x, y)) + geom_point() + 
+  geom_vline(xintercept = 0, color = "red", linetype = "dashed") + 
+  geom_hline(yintercept = 0, color = "blue", linetype = "dashed") + theme_bw()
+```
+
+Qual será a correlação dos dados nesses novos eixos?
+
+```{r}
+cor(dentus_A_rot$x, dentus_A_rot$y)
+```
+
+Ou seja, eles ainda são correlacionados. Qual seriam os eixos que deixam nossos dados não correlacionados?
+
+### Meu primeiro PCA
+
+A analise de componentes principais encontra esses eixos não correlacionados usando a matriz de covariância. Por enquanto, vamos continuar com apenas duas medidas (humero e ulna da especie A) e tentar encontrar os eixos onde essas duas medidas não são correlacionadas. Para isso, vamos encontrar a matriz de covariância entre essas duas medidas:
+
+```{r}
+# matriz de covariância entre humero e ulna
+cov_hu = cov(dentus_A[,1:2])
+cov_hu
+```
+
+Para encontrar os componentes principais, vamos usar a função eigen:
+
+```{r}
+# Vamos usar a função eigen na matriz de covariância cov_hu
+PC_hu = eigen(cov_hu)
+PC_hu
+```
+
+O objeto de saida da eigen, que eu chamei de PC_hu, tem duas partes: values e vectors. O vectors é uma matriz $2\times2$, e cada coluna corresponde a um PC. O número de PCs é sempre o mesmo que o numero de eixos originais, afinal, eu precisava de 2 eixos para descrever os dados e uma rotação não vai alterar isso. Então, o primeiro componente principal da matriz de covariância entre humero e ulna é:
+
+```{r}
+# Primeiro usamos o operador $ para pegar a matriz de PCs (vectors), 
+# depois o operador [,1] para pegar a primeira coluna da matriz de PCs
+PC_hu$vectors[,1]
+```
+
+Vamos colocar esses eixos no gráfico, como fizemos antes com os eixos azul e vermelho (vou manter o azul e o vermelho a titulo de comparação, até que nosso chute tinha sido bom!):
+
+```{r, warning=FALSE, message=FALSE }
+PC1 = PC_hu$vectors[,1]
+PC2 = PC_hu$vectors[,2]
+
+ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + 
+  geom_abline(intercept = 0, slope = 1, color = "blue", linetype = "dashed") + 
+  geom_abline(intercept = 0, slope = -1, color = "red", linetype = "dashed") + 
+  geom_segment(x = 0, y = 0, xend = PC1[1], yend = PC1[2], arrow = arrow(length = unit(0.03, "npc")), color = "green") + 
+  geom_segment(x = 0, y = 0, xend = PC2[1], yend = PC2[2], arrow = arrow(length = unit(0.03, "npc")), color = "purple") + theme_bw()
+```
+
+Agora vamos rotacionar os dados para os eixos dados pelos PCs
+
+```{r}
+# Rotacionando os dados usando os PCs
+dentus_A_rot_PCs = data.frame(as.matrix(dentus_A[,1:2]) %*% PC_hu$vectors)
+names(dentus_A_rot_PCs) = c("x", "y")
+ggplot(dentus_A_rot_PCs, aes(x, y)) + geom_point() + 
+  geom_vline(xintercept = 0, color = "purple", linetype = "dashed") + 
+  geom_hline(yintercept = 0, color = "green", linetype = "dashed") + theme_bw()
+```
+
+E a correlação?
+
+```{r}
+round(cor(dentus_A_rot_PCs$x, dentus_A_rot_PCs$y), 8)
+```
+
+
+## PCA em todas as espécies
+
+Agora vamos partir pra um exemplo de verdade e calcular os PCs dos nossos quatro caracteres para todas as espécies. Para isso, vamos calcular novamente nossas matrizes de covariância:
+
+```{r}
+# Vamos criar uma lista com todas as nossas matrizes de uma vez só:
+cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
+
+# Agora podemos acessar cada matriz individualmente colocando no final do nome da lista 
+# o operador $ seguido do nome da especie
+# Por exemplo, essa é a matriz de covariância da espécie A:
+cov_matrices$A
+```
+
+Para encontrar os componentes principais, vamos usar a função eigen:
+
+```{r}
+PCs_A = eigen(cov_matrices$A)
+PCs_A
+```
+
+Agora o vectors é uma matriz $4\times4$ (começamos com 4 eixos), e cada coluna corresponde a um PC. Então, o primeiro componente principal de A é:
+
+```{r}
+# Primeiro usamos o operador $ para pegar a matriz de PCs (vectors), 
+# depois o operador [,1] para pegar a primeira coluna da matriz de PCs
+PCs_A$vectors[,1]
+```
+
+## Values?
+
+Para entender o que são os values no objeto de saida da eigen(), vamos projetar nossos dados nos PCs:
+
+```{r}
+# Rotacionando os dados usando os PCs
+dentus_A_rot_PCs = as.matrix(dentus_A[,1:4]) %*% PCs_A$vectors
+
+# Primeiras linhas dos dados rotacionados
+head(dentus_A_rot_PCs)
+```
+
+Agora vamos calcular a matriz de covariância desses dados rotacionados:
+
+```{r}
+round(cov(dentus_A_rot_PCs), 10)
+```
+ Primeiro, note que todos os valores fora da diagonal são zero. Isso é esperado, afinal é isso que a analise de componentes principais faz: encontra eixos onde nossos dados não são correlacionados. Agora, vamos olhar para a diagonal, as variâncias dos dados rotacionados. Compare essas variâncias com os valores na parte "values" da saida da função eigen(). 
+ 
+Comparou?
+
+São os mesmos valores. Os values são as variâncias nas direções dos componentes principais. 
+
+## O primeiro componente principal
+
+Vocês leram sobre linhas de menor resistencia evolutiva no artigo do Schluter, e agora podemos entender porque essa linha corresponde ao primeiro componente principal. A quantidade de variação total na população é sempre preservada em todas essas analises que fizemos, afinal são só rotações. Para se convencer, vamos somar as variâncias originais e somar as variâncias saindo da eigen():
+
+```{r}
+var(dentus_A$humerus) + var(dentus_A$ulna) + var(dentus_A$femur) + var(dentus_A$tibia)
+sum(PCs_A$values)
+```
+
+
