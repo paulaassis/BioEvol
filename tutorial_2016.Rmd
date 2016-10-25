@@ -618,9 +618,9 @@ A diferença é que usando os PCs como eixos para representar nossas variáveis,
 
 ## PCA como analise exploratória
 
-O objetivo dessa aula é simplesmente encontrar os PCs para todas as espécies, e vocês já sabem como faz isso nessa altura. Fora de biologia evolutiva, é comum PCA ser utilizado como uma analise exploratória e de redução dimensional. A ideia geral é sempre a mesma (encontrar eixos com variação independente), e eventualmente descrever os dados utilizando menos variáveis. É comum, por exemplo, utilizar apenas os primeiros componentes principais por que eles respondem por grande parte da variação total. 
+O objetivo dessa aula é simplesmente encontrar os PCs para todas as espécies, e vocês já sabem como faz isso nessa altura. Fora de biologia evolutiva, é comum PCA ser utilizado como uma analise exploratória e de redução dimensional. A ideia geral é sempre a mesma (encontrar eixos com variação independente), e eventualmente descrever os dados utilizando menos variáveis. É comum, por exemplo, utilizar apenas os scores nos primeiros componentes principais por eles responderem por grande parte da variação total. 
 
-Um uso possivel é encontrar grupos. Suponha que não soubessemos que nossos dados vem de cinco espécies distintas. Será que um PCA poderia ajudar? Vamos calcular os componentes principais da matriz de covariância total e fazer um gráfico dos scores (dados rotacionados) nos dois primeiros componentes principais:
+Um uso possivel para PCA é encontrar grupos. Suponha que não soubessemos que nossos dados vem de cinco espécies distintas. Será que um PCA poderia ajudar? Vamos calcular os componentes principais da matriz de covariância total e fazer um gráfico dos scores (dados rotacionados) nos dois primeiros componentes principais:
 
 ```{r}
 mat_total = cov(dentus[,1:4])
@@ -630,7 +630,7 @@ names(dentus_rot) = c("PC1", "PC2", "PC3", "PC4", "species")
 ggplot(dentus_rot, aes(PC1, PC2)) + geom_point() + theme_bw()
 ```
 
-Claramente existem grupos distintos nesses dados. Nós sabemos que eles correspondem a espécies diferentes, então vamos incluir isso como cores:
+Claramente existem grupos distintos nesses dados. Nós sabemos que eles correspondem a espécies diferentes, então vamos incluir essa informação como cores:
 
 ```{r}
 ggplot(dentus_rot, aes(PC1, PC2, color = species)) + geom_point() + theme_bw()
