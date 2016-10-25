@@ -721,11 +721,12 @@ dentus_A_rot_PCs =<span class="st"> </span><span class="kw">as.matrix</span>(den
 </div>
 <div id="o-primeiro-componente-principal" class="section level2">
 <h2><span class="header-section-number">6.4</span> O primeiro componente principal</h2>
-<p>Vocês leram sobre linhas de menor resistencia evolutiva no artigo do Schluter, e agora podemos entender porque essa linha corresponde ao primeiro componente principal. A quantidade de variação total na população é sempre preservada em todas essas analises que fizemos, afinal são só rotações. Para se convencer, vamos somar as variâncias originais e somar as variâncias saindo da eigen:</p>
+<p>Vocês leram sobre linhas de menor resistencia evolutiva no artigo do Schluter, e agora podemos entender porque essa linha corresponde ao primeiro componente principal. A quantidade de variação total na população é sempre preservada em todas essas analises que fizemos, afinal são só rotações. Para conferir isso, vamos somar as variâncias originais e somar as variâncias saindo da eigen():</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(dentus_A$humerus) +<span class="st"> </span><span class="kw">var</span>(dentus_A$ulna) +<span class="st"> </span><span class="kw">var</span>(dentus_A$femur) +<span class="st"> </span><span class="kw">var</span>(dentus_A$tibia)</code></pre></div>
 <pre><code>## [1] 4.014503</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(PCs_A$values)</code></pre></div>
 <pre><code>## [1] 4.014503</code></pre>
+<p>A diferença é que usando os PCs como eixos para representar nossas variáveis, a varição é independente em cada eixo. Com isso, podemos simplesmente comparar as variâncias para saber em qual eixo está a maior parte da variação. Logo, o PC com maior variância corresponde ao eixo com maior variação fenotípica nos dados. Como evolução depende da variação disponível, a direção do primeiro componente principal é a direção que responde mais facilmente à seleção, ou seja, evolução é mais fácil ao longo do primeiro componente principal.</p>
 </div>
 </div>
 
