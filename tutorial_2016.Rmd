@@ -435,13 +435,13 @@ dentus_A = as.data.frame(scale(dentus[dentus$species == "A",1:4], scale = FALSE)
 
 # Plot de humero por ulna. Note que as duas medidas são correlacionadas 
 cor(dentus$humerus, dentus$ulna)
-ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + theme_bw()
+ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + coord_fixed() + theme_bw()
 ```
 
 Vamos agora incluir esses dois novos eixos hipotéticos, um na direção de aumento de humero e ulna (em azul), e um na direção de aumento de humero e diminuição de ulna (em vermelho). 
 
 ```{r, warning=FALSE, message=FALSE }
-ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + geom_abline(intercept = 0, slope = 1, color = "blue", linetype = "dashed") + geom_abline(intercept = 0, slope = -1, color = "red", linetype = "dashed") + geom_segment(x = 0, y = 0, xend = 1, yend = 1, arrow = arrow(length = unit(0.03, "npc")), color = "blue") + geom_segment(x = 0, y = 0, xend = 1, yend = -1, arrow = arrow(length = unit(0.03, "npc")), color = "red") + theme_bw()
+ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + coord_fixed() + geom_abline(intercept = 0, slope = 1, color = "blue", linetype = "dashed") + geom_abline(intercept = 0, slope = -1, color = "red", linetype = "dashed") + geom_segment(x = 0, y = 0, xend = 1, yend = 1, arrow = arrow(length = unit(0.03, "npc")), color = "blue") + geom_segment(x = 0, y = 0, xend = 1, yend = -1, arrow = arrow(length = unit(0.03, "npc")), color = "red") + theme_bw()
 ```
 
 Podemos calcular as medidas de cada inviduo (scores) nesses novos eixos projetando os pontos. Para isso, temos que achar o ponto na reta que seja o mais próximo do ponto a ser projetado. Isso envolve um pouco de trigonometria, mas vamos usar essa função que encontra o ponto numa reta mais próximo de um ponto qualquer. Eu mantive o código aqui a titulo de curiosidade, não precisam se preocupar com ele:
@@ -459,7 +459,7 @@ projecoes_blue = data.frame(t(apply(dentus_A[,1:2], 1, pontoMaisProximo, c(0, 0)
 names(projecoes_blue) = c("x1", "y1", "x2", "y2")
 projecoes_red = data.frame(t(apply(dentus_A[,1:2], 1, pontoMaisProximo, c(0, 0), c(1, -1))))
 names(projecoes_red) = c("x1", "y1", "x2", "y2")
-ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + 
+ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + coord_fixed() +
   geom_abline(intercept = 0, slope = 1, color = "blue", linetype = "dashed") + 
   geom_abline(intercept = 0, slope = -1, color = "red", linetype = "dashed") + 
   geom_segment(x = 0, y = 0, xend = 1, yend = 1, arrow = arrow(length = unit(0.03, "npc")), color = "blue") + 
@@ -475,7 +475,7 @@ Nós podemos também rotacionar o dados, e plotar cada individuo como se os novo
 dentus_A_rot = data.frame(as.matrix(dentus_A[,1:2]) %*% matrix(c(1/sqrt(2), 1/sqrt(2), 
                                                                  1/sqrt(2), -1/sqrt(2)), 2, 2))
 names(dentus_A_rot) = c("x", "y")
-ggplot(dentus_A_rot, aes(x, y)) + geom_point() + 
+ggplot(dentus_A_rot, aes(x, y)) + geom_point() + coord_fixed() + 
   geom_vline(xintercept = 0, color = "red", linetype = "dashed") + 
   geom_hline(yintercept = 0, color = "blue", linetype = "dashed") + 
   geom_segment(x = 0, y = 0, xend = 0, yend = 1, arrow = arrow(length = unit(0.03, "npc")), color = "red") + 
@@ -522,7 +522,7 @@ Vamos colocar esses eixos no gráfico, como fizemos antes com os eixos azul e ve
 PC1 = PC_hu$vectors[,1]
 PC2 = PC_hu$vectors[,2]
 
-ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + 
+ggplot(dentus_A, aes(humerus, ulna)) + geom_point() + coord_fixed() + 
   geom_abline(intercept = 0, slope = 1, color = "blue", linetype = "dashed") + 
   geom_abline(intercept = 0, slope = -1, color = "red", linetype = "dashed") + 
   geom_segment(x = 0, y = 0, xend = PC1[1], yend = PC1[2], arrow = arrow(length = unit(0.03, "npc")), color = "green") + 
@@ -535,7 +535,7 @@ Agora vamos rotacionar os dados para os eixos dados pelos PCs
 # Rotacionando os dados usando os PCs
 dentus_A_rot_PCs = data.frame(as.matrix(dentus_A[,1:2]) %*% PC_hu$vectors)
 names(dentus_A_rot_PCs) = c("x", "y")
-ggplot(dentus_A_rot_PCs, aes(x, y)) + geom_point() + 
+ggplot(dentus_A_rot_PCs, aes(x, y)) + geom_point() + coord_fixed() + 
   geom_vline(xintercept = 0, color = "purple", linetype = "dashed") + 
   geom_hline(yintercept = 0, color = "green", linetype = "dashed") + 
   geom_segment(x = 0, y = 0, xend = 0, yend = 1, arrow = arrow(length = unit(0.03, "npc")), color = "purple") + 
