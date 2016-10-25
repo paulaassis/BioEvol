@@ -578,6 +578,10 @@ Agora o vectors é uma matriz $4\times4$ (começamos com 4 eixos), e cada coluna
 PCs_A$vectors[,1]
 ```
 
+Note como todos os elementos desse componente tem o mesmo sinal e magnitude parecida. Isso significa que ao longo direção todas as medidas aumentam ou diminuem juntas. Componentes desse tipo são chamados de componentes de tamanho (size). 
+
+Podemos olhar pra o segundo componente, que tem valores positivos para humero e ulna, e negativos para femur e tibia. Ou seja, é uma direção ao longo da qual humero e ulna aumentam enquanto femur e tibia diminuem. Esse tipo de componente é um contraste entre os dois grupos de caracteres.
+
 ## Values?
 
 Para entender o que são os values no objeto de saida da eigen(), vamos projetar nossos dados nos PCs:
@@ -612,4 +616,26 @@ sum(PCs_A$values)
 
 A diferença é que usando os PCs como eixos para representar nossas variáveis, a variação é independente em cada eixo. Com isso, podemos simplesmente comparar as variâncias para saber em qual eixo está a maior parte da variação. Logo, o PC com maior variância corresponde ao eixo com maior variação fenotípica nos dados. Como evolução depende da variação disponível, a direção do primeiro componente principal é a direção que responde mais facilmente à seleção, ou seja, evolução é mais fácil ao longo do primeiro componente principal.
 
+## PCA como analise exploratória
 
+O objetivo dessa aula é simplesmente encontrar os PCs para todas as espécies, e vocês já sabem como faz isso nessa altura. Fora de biologia evolutiva, é comum PCA ser utilizado como uma analise exploratória e de redução dimensional. A ideia geral é sempre a mesma (encontrar eixos com variação independente), e eventualmente descrever os dados utilizando menos variáveis. É comum, por exemplo, utilizar apenas os primeiros componentes principais por que eles respondem por grande parte da variação total. 
+
+Um uso possivel é encontrar grupos. Suponha que não soubessemos que nossos dados vem de cinco espécies distintas. Será que um PCA poderia ajudar? Vamos calcular os componentes principais da matriz de covariância total e fazer um gráfico dos scores (dados rotacionados) nos dois primeiros componentes principais:
+
+```{r}
+mat_total = cov(dentus[,1:4])
+eigT = eigen(mat_total)
+dentus_rot = data.frame(as.matrix(dentus[,1:4]) %*% eigT$vectors, species = dentus$species)
+names(dentus_rot) = c("PC1", "PC2", "PC3", "PC4", "species")
+ggplot(dentus_rot, aes(PC1, PC2)) + geom_point() + theme_bw()
+```
+
+Claramente existem grupos distintos nesses dados. Nós sabemos que eles correspondem a espécies diferentes, então vamos incluir isso como cores:
+
+```{r}
+ggplot(dentus_rot, aes(PC1, PC2, color = species)) + geom_point() + theme_bw()
+```
+
+Isso é reconfortante, mesmo sem saber as espécies de antemão conseguiriamos chegar em grupos de forma bastante satisfatória. 
+
+Além disso, podemos ver que boa parte da diferenciação entre espécies se dá ao longo do PC1 da matriz total. Como você interpreta esse fato? __Dica__: interprete o primeiro componente da matriz de covariância total.
