@@ -477,7 +477,9 @@ dentus_A_rot = data.frame(as.matrix(dentus_A[,1:2]) %*% matrix(c(1/sqrt(2), 1/sq
 names(dentus_A_rot) = c("x", "y")
 ggplot(dentus_A_rot, aes(x, y)) + geom_point() + 
   geom_vline(xintercept = 0, color = "red", linetype = "dashed") + 
-  geom_hline(yintercept = 0, color = "blue", linetype = "dashed") + theme_bw()
+  geom_hline(yintercept = 0, color = "blue", linetype = "dashed") + 
+  geom_segment(x = 0, y = 0, xend = 0, yend = 1, arrow = arrow(length = unit(0.03, "npc")), color = "red") + 
+  geom_segment(x = 0, y = 0, xend = 1, yend = 0, arrow = arrow(length = unit(0.03, "npc")), color = "blue") +theme_bw()
 ```
 
 Qual será a correlação dos dados nesses novos eixos?
@@ -535,7 +537,9 @@ dentus_A_rot_PCs = data.frame(as.matrix(dentus_A[,1:2]) %*% PC_hu$vectors)
 names(dentus_A_rot_PCs) = c("x", "y")
 ggplot(dentus_A_rot_PCs, aes(x, y)) + geom_point() + 
   geom_vline(xintercept = 0, color = "purple", linetype = "dashed") + 
-  geom_hline(yintercept = 0, color = "green", linetype = "dashed") + theme_bw()
+  geom_hline(yintercept = 0, color = "green", linetype = "dashed") + 
+  geom_segment(x = 0, y = 0, xend = 0, yend = 1, arrow = arrow(length = unit(0.03, "npc")), color = "purple") + 
+  geom_segment(x = 0, y = 0, xend = 1, yend = 0, arrow = arrow(length = unit(0.03, "npc")), color = "green") +theme_bw()
 ```
 
 E a correlação?
