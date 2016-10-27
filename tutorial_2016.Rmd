@@ -578,7 +578,7 @@ Agora o vectors é uma matriz $4\times4$ (começamos com 4 eixos), e cada coluna
 PCs_A$vectors[,1]
 ```
 
-Note como todos os elementos desse componente tem o mesmo sinal e magnitude parecida. Isso significa que ao longo direção todas as medidas aumentam ou diminuem juntas. Componentes desse tipo são chamados de componentes de tamanho (size). 
+Note como todos os elementos desse componente tem o mesmo sinal e magnitude parecida. Isso significa que ao longo da direção definida por esse eixo todas as medidas aumentam ou diminuem juntas. Componentes desse tipo são chamados de componentes de tamanho (size). 
 
 Podemos olhar pra o segundo componente, que tem valores positivos para humero e ulna, e negativos para femur e tibia. Ou seja, é uma direção ao longo da qual humero e ulna aumentam enquanto femur e tibia diminuem. Esse tipo de componente é um contraste entre os dois grupos de caracteres.
 
@@ -618,7 +618,7 @@ A diferença é que usando os PCs como eixos para representar nossas variáveis,
 
 ## PCA como analise exploratória
 
-O objetivo dessa aula é simplesmente encontrar os PCs para todas as espécies, e vocês já sabem como faz isso nessa altura. Fora de biologia evolutiva, é comum PCA ser utilizado como uma analise exploratória e de redução dimensional. A ideia geral é sempre a mesma (encontrar eixos com variação independente), e eventualmente descrever os dados utilizando menos variáveis. É comum, por exemplo, utilizar apenas os scores nos primeiros componentes principais por eles responderem por grande parte da variação total. 
+O objetivo dessa aula é só encontrar os PCs para todas as espécies, e vocês já sabem como faz isso nessa altura. Fora de biologia evolutiva, é comum PCA ser utilizado como uma analise exploratória e de redução dimensional. A ideia geral é sempre a mesma (encontrar eixos com variação independente), e eventualmente descrever os dados utilizando menos variáveis. É comum, por exemplo, utilizar apenas os scores nos primeiros componentes principais por eles responderem por grande parte da variação total. 
 
 Um uso possivel para PCA é encontrar grupos. Suponha que não soubessemos que nossos dados vem de cinco espécies distintas. Será que um PCA poderia ajudar? Vamos calcular os componentes principais da matriz de covariância total e fazer um gráfico dos scores (dados rotacionados) nos dois primeiros componentes principais:
 
