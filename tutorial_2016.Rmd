@@ -26,7 +26,7 @@ Primeiro alguns links:
 
 ## Genética quantitativa e evolução
 
-Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos medidos em cinco espécies de roedores em uma filogenía conhecida. Usando esse conjunto de dados, vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.
+Neste tutorial vamos passar por todas as etapas de análise de um conjunto de dados em genética quantitativa aplicada à macroevolução. Vamos estudar quatro caracteres quantitativos medidos em cinco espécies de roedores em uma filogenia conhecida. Usando esse conjunto de dados, vamos caracterizar o padrão de modularidade em cada espécie, as diferenças nas morfologias médias, e os processos evolutivos que levaram à diferenciação atual.
 
 O primeiro passo, como sempre, é escolher um ambiente de análise. Neste tutorial vamos usar a linguem R, mas todos os passos poderiam ser feitos num programa gráfico como excel e Systat, ou em qualquer outra linguagem de programação, como python, perl, java, C ou Haskell. A linguagem R é especialmente conveniente, primeiro por que os monitores sabem usar ela, e segundo por que existe um pacote (escrito pelos monitores) que automatiza várias dos passos da análise.
 
@@ -646,3 +646,248 @@ Além disso, podemos ver que boa parte da diferenciação entre espécies se dá
 
     __Abstract:__ 
     Theory predicts that genetic and phenotypic correlations among traits may direct the process of short-term evolution by limiting the directions of variation available to natural selection to act on. We studied correlations between 14 skeletal traits in 10 geographically distinct and relatively young greenfinch (Carduelis chloris) populations to unravel whether the divergence among populations has occurred into directions predicted by the within-population correlations (cf. drift/correlated responses models), or whether it is better explained by ‘adaptive’ models, which predict no necessary association between within- and among-population correlations (allometries). We found that the within-population character correlations (or covariances) did not predict character divergence between populations. This was because the first eigenvector of the among-population correlation/covariance matrix, summarizing the major dimension of divergence, was a bipolar body:beak dimension, and distinct from the (≈ isometric) first eigenvector of within-population matrix. Hence, as the divergence among greenfinch populations cannot be satisfactorily accommodated by drift/correlated response models, an adaptive basis for divergence is suggested. The second major axis of within-population variation was a classical ‘group size’ factor revealing that beak size was more or less free to vary independently of body size. Consequently, even if the divergence among populations cannot be simply accommodated to expectations of drift and correlated response models, it is striking that the most pronounced size-independent (nonallometric) changes had occurred along the second largest dimension of variance. This could mean that selection pressures which shape integration within populations are the same as those that cause divergence among populations. A relaxed beak:body integration could also occur as a result of species level selection favouring taxa in which independent evolution of beak and body is made possible.
+    
+# Objetivos da Aula 4
+
+- Estimar os estados ancestrais para os 4 caracteres em todos os nós da filogenia;
+- Estimar a diferença nas médias entre ancestrais e descendentes ao longo da filogenia ($\Delta z$).
+
+__Objetivo Bonus!__
+
+- Estimar a correlação entre os $\Delta z$  que levaram às espécies atuais e seus primeiros componentes principais.
+
+## Estados ancestrais
+
+Essa aula se baseia na ideia de usar medidas em espécies ou populações atuais e as relações filogenéticas entre elas para estimar estados de caracteres ancestrais. (Note que a ideia é muito diferente de uma análise filogenética, nós não queremos usar os estados atuais para encontrar a filogenia.) Para caracteres continuos, imagine que as elipses na figura a seguir sejam um caráter a ser reconstruido ao longo da filogenia:
+
+![](./ancestral_ilustration.png)
+
+Existem dois métodos populares e faceis de usar no R para reconstrução de caracteres ancestrais: a parcimônia quadrada e a máxima verossimilhança. Ambos dão o mesmo resultado quando a filogenia usada não inclui os tamanhos de ramo. Cada método tem sua lógica e suas vantágens e desvantágens:
+
+- Parcimônia quadrada:
+
+    - Minimiza a mudança evolutiva quadrada ao longo da filogenia;
+  
+    - Ignora os tamanhos de ramo.
+  
+- Máxima verossimilhança:
+
+    - Encontra os estados ancestrais mais plausíveis, assumindo que a distribuição das médias das espécies é multivariada normal;
+  
+    - Incorpora tamanho de ramo;
+  
+    - Pode ser usado para estimar taxas evolutivas usando um modelo de evolução por movimento Browniano.
+    
+Outra opção é a parcimônia linear, que não está disponível no R, mas pode ser feita usando o programa [mesquite](http://mesquiteproject.wikispaces.com/)
+
+Aqui vamos usar o método de máxima verossimilhança. Primeiro, como sempre, vamos carregar os dados e carregar alguns pacotes:
+
+```{r, warning=FALSE, message=FALSE }
+if(!require(evolqg)){install.packages("evolqg"); library(evolqg)}
+if(!require(ape)){install.packages("ape"); library(ape)}
+data(dentus)
+```
+
+Agora vamos colocar nossa filogenia num objeto do R, usand uma notação parentética:
+
+```{r, warning=FALSE, message=FALSE}
+TREE <- "(A:4,(B:3,(C:2,(D:1, E:1):1):1):1);"
+tree <- read.tree(text = TREE)
+tree$tip.label = c("A", "B", "C", "D", "E")
+tree$node.label = c("root", "BCDE", "CDE", "DE")
+plot(tree, show.node.label=TRUE)
+nodelabels()
+```
+
+Para fazer as estimativas ancestrais, precisamos calcular as médias atuais. Podemos fazer isso rapidamente usando a função ddply do pacote [plyr](http://had.co.nz/plyr/).
+
+```{r}
+dentus_means = ddply(dentus, "species", numcolwise(mean))
+dentus_means
+```
+
+Cada coluna do objeto dentus_means contém as médias de um caráter para cada espécie. A função de reconstrução de caracteres ancestrais do pacote ape usa esses valores e a arvore filogenética para fazer a reconstrução:
+
+```{r}
+humerus_ancestral = ace(dentus_means$humerus, tree)
+humerus_ancestral
+```
+
+Novamente o objeto de saida tem várias partes, chamadas ace, sigma2 e CI95. ace são as estimativas propriamente ditas; sigma2 é um parâmetro ligado à taxa de evolução sobre um modelo de movimento browniano; e CI95 são os intervalos de confiânça para as estimativas em cada nó. Nesse curso vamos nos preocupar apenas com as estimativas, e podemos acessá-las usando o operador $:
+
+```{r}
+humerus_ancestral$ace
+```
+
+Isso é um vetor com um valor para cada nó, que estão numerados. Podemos ver na filogenia a quais nós correspondem esses números. 
+__Pergunta:__ De acordo com essa reconstrução, o humero está aumentando ou diminuindo a medida de subimos nos nós da filogenia? 
+
+Vamos agora calcular os estados ancestrais para os outros caracteres:
+
+```{r, warning=FALSE, message=FALSE}
+dentus_ancestral = sapply(dentus_means[2:5], function(x) ace(x, tree)$ace)
+dentus_ancestral
+```
+
+Vamos incluir uma coluna de "especie" nessa tabela de estados ancestrais:
+
+```{r}
+dentus_ancestral = data.frame(species = c("root", "BCDE", "CDE", "DE"), dentus_ancestral)
+```
+
+Agora podemos juntar ela com nossa tabela de médias antiga, e ficar com tudo no mesmo objeto:
+
+```{r}
+dentus_means_ace = rbind(dentus_means, dentus_ancestral)
+dentus_means_ace
+```
+
+Essa é uma ótima tabela, e vc pode salvar ela pra um arquivo usando o comando:
+
+```{r, eval=FALSE}
+write.csv(dentus_means_ace, "meu_arquivo_de_medias.csv")
+```
+
+Essa tabela é ótima para o excel (guarde ela! vamos usar na próxima aula (acho)), mas seria melhor ter um objeto que facilitasse as contas. Para isso, vamos transformar essa tabela em uma lista:
+
+```{r}
+l_dentus = dlply(dentus_means_ace, .(species), numcolwise(identity))
+```
+
+Esse objeto l_dentus é muito conveniente, por que com ele podemos acessar as médias de qualquer ponto da filogenia usando o operador $. Por exemplo, para obter a média da raiz da filogenia:
+
+```{r}
+l_dentus$root
+```
+
+Agora podemos usar esse vetores de caracteres para calcular nossos vetores de mudança fenotípica ao longo da filogenia, os famigerados $\Delta z$. Para isso, é só subtrair o descendente do ancestral. Por exemplo, para o $\Delta z$ associado ao ramo que vai do nó DE para o terminal D, fazemos:
+
+```{r}
+deltaZ_DE_D = l_dentus$D - l_dentus$DE
+deltaZ_DE_D
+```
+
+Isso é o vetor de mudança evolutiva entre a espécie D e seu ancestral mais próximo.
+
+## Correlação de vetores
+
+Para entender o conceito de correlação de vetores vamos precisar de alguns elementos. Primeiro, vamos definir o produto interno entre dois vetores. Um produto interno é uma operação que leva de um par de vetores para um número e respeita algumas propriedades. Para as nossas aplicações, o produto interno entre os vetores $\mathbf a$ e $\mathbf b$ é definido como a __soma dos produtos cruzados entre os elementos dos dois vetores__:
+
+$$
+\mathbf a \cdot \mathbf b = \sum_{i=1}^n a_i\times b_i
+$$ 
+
+Então, se $\mathbf a = \{1, 2, 3\}$ e $\mathbf b = \{4, 5, 6\}$, o produto interno fica:
+
+$$
+\mathbf a \cdot \mathbf b = a_1 \times b_1 + a_2 \times b_2 + a_3 \times b_3 = 1 \times 4 + 2 \times 5 + 3 \times 6 = 32
+$$ 
+
+Podemos usar o produto interno para definir a norma, ou comprimento, de um vetor. A norma é a __raiz quadrada do produto interno do vetor por ele mesmo__:
+
+$$
+\| \mathbf a \| = \sqrt{a \cdot a}
+$$
+
+Em duas dimensões isso é o teorema de pitágoras! (faça um desenho de um vetor em duas dimensões e tente ver isso (se você não lembra o teorema de Pitágoras é meio que probleam seu cara, olha na wikipedia, sei lá (e você achou que nunca mais fosse precisar do teorema de Pitágoras ein!))).
+
+
+Agora eu vou precisar mostrar uma definição alternativa do produto interno. Vamos pensar na norma ao quadrado da diferença de dois vetores:
+
+$$
+\|(a-b)\|^2 = (a - b) \cdot (a-b) = a \cdot a + b \cdot b - 2 a \cdot b = \|a\|^2 + \|b\|^2 - 2(a \cdot b)
+$$
+
+Agora, vamos lembrar da lei dos cossenos, que, usando a notação dessa figura:
+
+![](cos_rule.png)
+
+Pode ser escrita como:
+
+$$
+c^2 = \|a-b\|^2 = \|a\|^2 + \|b\|^2 - 2\|a\|\|b\|cos\theta
+$$
+
+Juntando a equação para $\|a-b\|^2$ com a lei dos cossenos:
+
+$$
+\|a\|^2 + \|b\|^2 - 2\|a\|\|b\|cos\theta = \|a\|^2 + \|b\|^2 - 2(a \cdot b)
+$$
+
+$$
+a \cdot b = \|a\|\|b\|cos\theta
+$$
+
+Ou:
+
+$$
+cos\theta = \frac{a \cdot b}{\|a\|\|b\|}
+$$
+
+Ou seja, o cosseno do angulo entre dois vetores pode ser escrito como o __produto interno entre eles dividido pelo produto das suas normas__. Esse valor de cosseno pode ser utilizado como uma medida de similaridade de vetores no que se refere à sua direção. Se dois vetores apontam no mesmo sentido, o angulo entre eles é zero e o cosseno é 1; se eles apontam em direções ortogonoais, o angulo entre eles é de noventa graus e o cosseno é zero. 
+
+Para entender por que nós costumamos chamar essa medida de correlação de vetores, pense na equaçao da correlação entre $x$ e $y$:
+
+$$
+Cor(x, y) = \frac{1}{N}  \frac{\sum_{i = 1}^{N} (x_i - \overline{x})(y_i - \overline y)}{\sigma_x \sigma_y} 
+$$
+
+Abrindo os desvios padrão no denominador:
+
+$$
+Cor(x, y) = \frac{1}{N} \frac{\sum_{i = 1}^{N}  (x_i - \overline{x})(y_i - \overline y)}{\sqrt{\frac{1}{N} \sum_{i = 1}^{N} (x_i - \overline{x})^2 \frac{1}{N} \sum_{i = 1}^{N} (y_i - \overline{y})^2}}
+$$
+
+Os $1/N$ cancelam, e ficamos com:
+
+$$
+Cor(x, y) =  \frac{\sum_{i = 1}^{N} (x_i - \overline{x})(y_i - \overline y)}{\sqrt{ \sum_{i = 1}^{N} (x_i - \overline{x})^2 } \sqrt{ \sum_{i = 1}^{N} (y_i - \overline{y})^2}}
+$$
+
+Agora imagine que os valores estão centrados na média, então $\overline x$ e$\overline y$ são zero:
+
+$$
+Cor(x, y) =  \frac{\sum_{i = 1}^{N} x_iy_i}{\sqrt{ \sum_{i = 1}^{N} x_i^2 } \sqrt{ \sum_{i = 1}^{N} y_i^2}}
+$$
+
+Isso é exatamente a mesma coisa que:
+
+$$
+Cor(x, y) =  \frac{x \cdot y}{\|x\|\|y\|}
+$$
+
+Então, o angulo entre dois vetores e a correlação entre eles são a mesma coisa se a média deles for zero. Dai o nome correlação de vetores para o cosseno do angulo entre eles.
+
+### Calculando correlações no R
+
+Para calcular correlações de vetor no R, vamos escrever algumas funções que façam tudo que a gente precisa. 
+
+Primeiro uma para o produto interno:
+```{r}
+prod_interno = function(x, y) sum(x * y)
+```
+
+Depois uma para a norma:
+
+```{r}
+norma = function(x) sqrt(prod_interno(x, x))
+```
+
+E finalmente uma para a correlação:
+
+```{r}
+corVector = function(x, y) prod_interno(x, y)/(norma(x)*norma(y))
+```
+
+Agora podemos usar essa função para calcular correlações entre todos os nossos vetores e responder perguntas evolutivas! Por exemplo, será que a diferenciação da população D se deu ao longo da sua linha de menor resistencia evolutiva?
+
+```{r}
+cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
+PC1_D = eigen(cov_matrices$D)$vectors[,1]
+abs(corVector(PC1_D, deltaZ_DE_D))
+```
+
+Parce que sim!!
+
+
+Agora divita-se, calcule os $\Delta z$ ao longo da filogenia, e use a correlação de vetores para investigar seus dados. Os $\Delta z$ são todos na mesma direção? Como os $\Delta z$ nos teminais se alinham com as respectivas linhas de menor resistência? Pense em quais perguntas você é capaz de responder com esses dados agora.
