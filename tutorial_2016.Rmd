@@ -792,13 +792,13 @@ $$
 Em duas dimensões isso é o teorema de pitágoras! (faça um desenho de um vetor em duas dimensões e tente ver isso (se você não lembra o teorema de Pitágoras é meio que probleam seu cara, olha na wikipedia, sei lá (e você achou que nunca mais fosse precisar do teorema de Pitágoras ein!))).
 
 
-Agora eu vou precisar mostrar uma definição alternativa do produto interno. Vamos pensar na norma ao quadrado da diferença de dois vetores:
+Agora vamos pensar na norma ao quadrado da diferença de dois vetores:
 
 $$
 \|(a-b)\|^2 = (a - b) \cdot (a-b) = a \cdot a + b \cdot b - 2 a \cdot b = \|a\|^2 + \|b\|^2 - 2(a \cdot b)
 $$
 
-Agora, vamos lembrar da lei dos cossenos, que, usando a notação dessa figura:
+Guarde esse resultado e vamos lembrar da lei dos cossenos, que, usando a notação dessa figura:
 
 ![](cos_rule.png)
 
