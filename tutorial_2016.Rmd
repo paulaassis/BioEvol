@@ -844,7 +844,7 @@ $$
 Cor(x, y) =  \frac{\sum_{i = 1}^{N} (x_i - \overline{x})(y_i - \overline y)}{\sqrt{ \sum_{i = 1}^{N} (x_i - \overline{x})^2 } \sqrt{ \sum_{i = 1}^{N} (y_i - \overline{y})^2}}
 $$
 
-Agora imagine que os valores estão centrados na média, então $\overline x$ e$\overline y$ são zero:
+Agora imagine que os valores estão centrados na média, então $\overline x$ e $\overline y$ são zero:
 
 $$
 Cor(x, y) =  \frac{\sum_{i = 1}^{N} x_iy_i}{\sqrt{ \sum_{i = 1}^{N} x_i^2 } \sqrt{ \sum_{i = 1}^{N} y_i^2}}
@@ -856,7 +856,7 @@ $$
 Cor(x, y) =  \frac{x \cdot y}{\|x\|\|y\|}
 $$
 
-Então, o angulo entre dois vetores e a correlação entre eles são a mesma coisa se a média deles for zero. Dai o nome correlação de vetores para o cosseno do angulo entre eles.
+Que é a formula para o cosseno do angulo entre $x$ e $y$! Então, o cosseno do angulo entre dois vetores e a correlação entre eles são a mesma coisa se a média deles for zero. Dai o nome correlação de vetores para o cosseno do angulo entre eles.
 
 ### Calculando correlações no R
 
@@ -890,4 +890,4 @@ abs(corVector(PC1_D, deltaZ_DE_D))
 Parce que sim!!
 
 
-Agora divita-se, calcule os $\Delta z$ ao longo da filogenia, e use a correlação de vetores para investigar seus dados. Os $\Delta z$ são todos na mesma direção? Como os $\Delta z$ nos teminais se alinham com as respectivas linhas de menor resistência? Pense em quais perguntas você é capaz de responder com esses dados agora.
+Agora divirta-se, calcule os $\Delta z$ ao longo da filogenia e use a correlação de vetores para investigar seus dados. Os $\Delta z$ são todos na mesma direção? Como os $\Delta z$ nos teminais se alinham com as respectivas linhas de menor resistência? Pense em quais perguntas você é capaz de responder com esses dados agora.

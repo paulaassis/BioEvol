@@ -929,7 +929,7 @@ Cor(x, y) = \frac{1}{N} \frac{\sum_{i = 1}^{N}  (x_i - \overline{x})(y_i - \over
 <p><span class="math display">\[
 Cor(x, y) =  \frac{\sum_{i = 1}^{N} (x_i - \overline{x})(y_i - \overline y)}{\sqrt{ \sum_{i = 1}^{N} (x_i - \overline{x})^2 } \sqrt{ \sum_{i = 1}^{N} (y_i - \overline{y})^2}}
 \]</span></p>
-<p>Agora imagine que os valores estão centrados na média, então <span class="math inline">\(\overline x\)</span> e<span class="math inline">\(\overline y\)</span> são zero:</p>
+<p>Agora imagine que os valores estão centrados na média, então <span class="math inline">\(\overline x\)</span> e <span class="math inline">\(\overline y\)</span> são zero:</p>
 <p><span class="math display">\[
 Cor(x, y) =  \frac{\sum_{i = 1}^{N} x_iy_i}{\sqrt{ \sum_{i = 1}^{N} x_i^2 } \sqrt{ \sum_{i = 1}^{N} y_i^2}}
 \]</span></p>
@@ -937,7 +937,7 @@ Cor(x, y) =  \frac{\sum_{i = 1}^{N} x_iy_i}{\sqrt{ \sum_{i = 1}^{N} x_i^2 } \sqr
 <p><span class="math display">\[
 Cor(x, y) =  \frac{x \cdot y}{\|x\|\|y\|}
 \]</span></p>
-<p>Então, o angulo entre dois vetores e a correlação entre eles são a mesma coisa se a média deles for zero. Dai o nome correlação de vetores para o cosseno do angulo entre eles.</p>
+<p>Que é a formula para o cosseno do angulo entre <span class="math inline">\(x\)</span> e <span class="math inline">\(y\)</span>! Então, o cosseno do angulo entre dois vetores e a correlação entre eles são a mesma coisa se a média deles for zero. Dai o nome correlação de vetores para o cosseno do angulo entre eles.</p>
 <div id="calculando-correlacoes-no-r" class="section level3">
 <h3><span class="header-section-number">8.2.1</span> Calculando correlações no R</h3>
 <p>Para calcular correlações de vetor no R, vamos escrever algumas funções que façam tudo que a gente precisa.</p>
@@ -953,7 +953,7 @@ PC1_D =<span class="st"> </span><span class="kw">eigen</span>(cov_matrices$D)$ve
 <span class="kw">abs</span>(<span class="kw">corVector</span>(PC1_D, deltaZ_DE_D))</code></pre></div>
 <pre><code>## [1] 0.9349596</code></pre>
 <p>Parce que sim!!</p>
-<p>Agora divita-se, calcule os <span class="math inline">\(\Delta z\)</span> ao longo da filogenia, e use a correlação de vetores para investigar seus dados. Os <span class="math inline">\(\Delta z\)</span> são todos na mesma direção? Como os <span class="math inline">\(\Delta z\)</span> nos teminais se alinham com as respectivas linhas de menor resistência? Pense em quais perguntas você é capaz de responder com esses dados agora.</p>
+<p>Agora divirta-se, calcule os <span class="math inline">\(\Delta z\)</span> ao longo da filogenia e use a correlação de vetores para investigar seus dados. Os <span class="math inline">\(\Delta z\)</span> são todos na mesma direção? Como os <span class="math inline">\(\Delta z\)</span> nos teminais se alinham com as respectivas linhas de menor resistência? Pense em quais perguntas você é capaz de responder com esses dados agora.</p>
 </div>
 </div>
 </div>
