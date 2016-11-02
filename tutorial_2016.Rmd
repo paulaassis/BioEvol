@@ -658,11 +658,11 @@ __Objetivo Bonus!__
 
 ## Estados ancestrais
 
-Essa aula se baseia na ideia de usar medidas em espécies ou populações atuais e as relações filogenéticas entre elas para estimar estados de caracteres ancestrais. (Note que a ideia é muito diferente de uma análise filogenética, nós não queremos usar os estados atuais para encontrar a filogenia.) Para caracteres continuos, imagine que as elipses na figura a seguir sejam um caráter a ser reconstruido ao longo da filogenia:
+Essa aula se baseia na ideia de usar medidas em espécies ou populações atuais e as relações filogenéticas entre elas para estimar estados de caracteres ancestrais. (Note que a ideia é muito diferente de uma análise filogenética, nós não queremos usar os estados atuais para encontrar a filogenia). Para caracteres continuos, imagine que as elipses na figura a seguir sejam um caráter a ser reconstruido ao longo da filogenia:
 
 ![](./ancestral_ilustration.png)
 
-Existem dois métodos populares e faceis de usar no R para reconstrução de caracteres ancestrais: a parcimônia quadrada e a máxima verossimilhança. Ambos dão o mesmo resultado quando a filogenia usada não inclui os tamanhos de ramo. Cada método tem sua lógica e suas vantágens e desvantágens:
+Existem dois métodos populares e fáceis de usar no R para reconstrução de caracteres ancestrais: a parcimônia quadrada e a máxima verossimilhança. Ambos dão o mesmo resultado quando a filogenia usada não inclui os tamanhos de ramo. Cada método tem sua lógica e suas vantágens e desvantagens:
 
 - Parcimônia quadrada:
 
@@ -789,7 +789,7 @@ $$
 \| \mathbf a \| = \sqrt{a \cdot a}
 $$
 
-Em duas dimensões isso é o teorema de Pitágoras! (faça um desenho de um vetor em duas dimensões e tente ver isso (se você não lembra o teorema de Pitágoras é meio que problema seu cara, olha na wikipedia, sei lá (e você achou que nunca mais fosse precisar do teorema de Pitágoras ein!))).
+Em duas dimensões isso é o teorema de pitágoras! (faça um desenho de um vetor em duas dimensões e tente ver isso (se você não lembra o teorema de Pitágoras é meio que probleam seu cara, olha na wikipedia, sei lá (e você achou que nunca mais fosse precisar do teorema de Pitágoras ein!))).
 
 
 Agora vamos pensar na norma ao quadrado da diferença de dois vetores:
