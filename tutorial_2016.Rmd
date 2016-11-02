@@ -789,7 +789,7 @@ $$
 \| \mathbf a \| = \sqrt{a \cdot a}
 $$
 
-Em duas dimensões isso é o teorema de pitágoras! (faça um desenho de um vetor em duas dimensões e tente ver isso (se você não lembra o teorema de Pitágoras é meio que probleam seu cara, olha na wikipedia, sei lá (e você achou que nunca mais fosse precisar do teorema de Pitágoras ein!))).
+Em duas dimensões isso é o teorema de Pitágoras! (faça um desenho de um vetor em duas dimensões e tente ver isso (se você não lembra o teorema de Pitágoras é meio que problema seu cara, olha na wikipedia, sei lá (e você achou que nunca mais fosse precisar do teorema de Pitágoras ein!))).
 
 
 Agora vamos pensar na norma ao quadrado da diferença de dois vetores:
